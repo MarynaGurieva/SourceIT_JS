@@ -18,3 +18,5 @@ typeof {}; // "object"
 alert(typeof {});
 typeof null; // "object"
 alert(typeof null);
+
+// check GitBash
