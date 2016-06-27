@@ -155,3 +155,199 @@ function pow (x, n) {
 	return x;
 }
 console.log(powValue);
+
+
+/*Задача из 5 шагов-строк:
+Создайте массив styles с элементами «Джаз», «Блюз».
+Добавьте в конец значение «Рок-н-Ролл»
+Замените предпоследнее значение с конца на «Классика». Код замены предпоследнего значения должен работать для массивов любой длины.
+Удалите первое значение массива и выведите его alert.
+Добавьте в начало значения «Рэп» и «Регги».*/
+var styles = ["Jazz", "Blues"];
+styles.push("Rock`n`roll");
+console.log(styles);
+styles.splice(-2, 1, "Classic");
+console.log(styles);
+alert(styles.shift(0));
+console.log(styles);
+styles.unshift("Rap", "Reggae");
+console.log(styles);
+
+
+/*Напишите код для вывода alert случайного значения из массива:
+P.S. Код для генерации случайного целого от min to max включительно:
+var rand = min + Math.floor(Math.random() * (max + 1 - min));*/
+var arr = ["apple", "orange", "pear", "lemon"];
+var rand = 0 + Math.floor(Math.random() * ((arr.length - 1) + 1 - 0));
+alert(arr[rand]);
+
+
+/*Создайте калькулятор для введённых значений
+Напишите код, который:
+Запрашивает по очереди значения при помощи prompt и сохраняет их в массиве.
+Заканчивает ввод, как только посетитель введёт пустую строку, не число или нажмёт «Отмена».
+При этом ноль 0 не должен заканчивать ввод, это разрешённое число.
+Выводит сумму всех значений массива*/
+var arr = [];
+var sum = 0;
+for (var i = 0;; i++) {
+	var num = prompt("Please, enter any number:");
+	if (num === null || num === "" || isNaN(num)) break	// 
+	arr[i] = +num;
+	sum += +num;
+}
+console.log(arr);
+console.log(sum);
+
+
+/*Создайте функцию find(arr, value), которая ищет в массиве arr значение value и возвращает его номер, если найдено, или -1, если не найдено.*/
+var myArr = ["test", 1.5, 3, 9, 5, 45];
+function find(arr, value) {
+	var index = -1;
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i] === value) {
+			index = i;
+			break;
+		}
+	}
+	return index;
+}
+var myFind = find(myArr, 1.5);
+console.log(myFind);
+//  определить find по-разному в зависимости от поддержки браузером метода indexOf:
+// создаем пустой массив и проверяем поддерживается ли indexOf
+if ([].indexOf) {
+  var find = function(array, value) {
+    return array.indexOf(value);
+  }
+} else {
+  var find = function(array, value) {
+    for (var i = 0; i < array.length; i++) {
+      if (array[i] === value) return i;
+    }
+    return -1;
+  }
+}
+
+
+// Фильтр диапазона
+/*Создайте функцию filterRange(arr, a, b), которая принимает массив чисел arr и возвращает новый массив, 
+который содержит только числа из arr из диапазона от a до b. То есть, проверка имеет вид a ≤ arr[i] ≤ b. 
+Функция не должна менять arr*/
+var myArr = [0, 2, 5, 7, 15, 3, 8, 101, 75, -4];
+function filterRange(arr, a, b) {
+	var arr1 =[];
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i] >= a && arr[i] <= b) {
+			arr1.push(arr[i]);
+		}
+	}
+	return arr1;
+}
+var newArr = filterRange(myArr, 5, 15);
+console.log(newArr);
+
+
+// РЕШИТЬ!!!
+// Решето Эратосфена
+/*Реализуйте «Решето Эратосфена» в JavaScript, используя массив.
+Найдите все простые числа до 100 и выведите их сумму.*/
+//Древний алгоритм «Решето Эратосфена» для поиска всех простых чисел до n выглядит так:
+/*Создать список последовательных чисел от 2 до n: 2, 3, 4, ..., n.
+Пусть p=2, это первое простое число.
+Зачеркнуть все последующие числа в списке с разницей в p, т.е. 2*p, 3*p, 4*p и т.д. В случае p=2 это будут 4,6,8....
+Поменять значение p на первое не зачеркнутое число после p.
+Повторить шаги 3-4 пока p2 < n.
+Все оставшиеся не зачеркнутыми числа – простые.*/
+var arr = [];
+for (var i = 0; i < 100; i++) {
+	arr[i] = i + 1;
+}
+console.log(arr);
+for (var i = 0; i < arr.length; i++) {
+
+}
+
+for (var p = arr[1]; p * p < 100; p = arr[1]) {
+	for (var i = 0; i < arr.length; i++) {
+		if ( arr[i] % ((i + 2) * p) === 0) {
+			arr.splice(i, 1);
+		}
+	}
+}
+console.log(arr);
+
+
+// Напишите if..else, соответствующий следующему switch:
+var browser = "IE";
+switch (browser) {
+  case 'IE':
+    alert( 'О, да у вас IE!' );
+    break;
+
+  case 'Chrome':
+  case 'Firefox':
+  case 'Safari':
+  case 'Opera':
+    alert( 'Да, и эти браузеры мы поддерживаем' );
+    break;
+
+  default:
+    alert( 'Мы надеемся, что и в вашем браузере все ок!' );
+}
+
+var browser = "IE";
+if (browser === "IE") {
+	alert ('О, да у вас IE!');
+} else if (browser === 'Chrome' 
+	|| browser === 'Firefox' 
+	|| browser === 'Safari'
+	|| browser === 'Opera') {
+	alert( 'Да, и эти браузеры мы поддерживаем' );
+} else {
+	alert( 'Мы надеемся, что и в вашем браузере все ок!' );
+}
+
+
+// Перепишите код с использованием одной конструкции switch:
+var a = +prompt('a?', '');
+if (a == 0) {
+  alert( 0 );
+}
+if (a == 1) {
+  alert( 1 );
+}
+if (a == 2 || a == 3) {
+  alert( '2,3' );
+}
+
+var a = +prompt('a?', '');
+switch (a) {
+	case 0:
+		alert(0);
+		break;
+	case 1:
+		alert(1);
+		break;
+	case 2:
+	case 3:
+		alert("2,3");
+		break;
+}
+
+/*Задан одномерный массив чисел. Напишите функцию, которая возвращает кол-во отрицательных элементов.*/
+var myArr = [1, -3, 0, -45, 6, -0.8, 100, -24];
+function negativeElements (arr) {
+	var elements = 0;
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i] < 0) {
+			elements += 1;
+		}
+	}
+	return elements;
+}
+var negativeElementsArr = negativeElements (myArr);
+console.log(negativeElementsArr);
+
+
+
