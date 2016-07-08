@@ -67,6 +67,9 @@ r.unshift(firstElement);
 console.log('perimeter', r);		// perimeter [1, 5, 9, 13, 14, 15, 16, 12, 8, 4, 3, 2]
 // r.push( r.shift() );
 // r.reverse();
+/*Все правильно) 
+только я говорил не использовать разворот периметра полученного по часовой стрелке, 
+а получить периметр против часовой стрелки по частям, чтобы "набить руку".*/
 
 
 // ДЗ №3:
@@ -82,7 +85,9 @@ function trigon(arr) {
  
 	var diagonal = [];		// здесь - главная диагональ - только для массива, у которого i=j
 	for (var i = 1; i < arr.length - 1; i++) {
-		var j = i;
+		var j = i;			
+/*Здесь можно было не вводить переменную var j = i;
+a просто diagonal.push(arr[i][i]);*/
 		diagonal.push( arr[i][j] );
 	}
 	diagonal.reverse();

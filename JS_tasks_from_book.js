@@ -350,4 +350,83 @@ var negativeElementsArr = negativeElements (myArr);
 console.log(negativeElementsArr);
 
 
+/*Напишите функцию sumTo(n), которая для данного n вычисляет сумму чисел от 1 до n.
+Сделайте три варианта решения:
+1). С использованием цикла.
+2). Через рекурсию, т.к. sumTo(n) = n + sumTo(n-1) для n > 1.
+3). С использованием формулы для суммы арифметической прогрессии.*/
+// #1
+var n = +prompt("Please, enter the n:", 5);
+var sum = 0;
+for (i = 1; i <= n; i++) {
+	sum += i;
+}
+console.log(sum);
 
+// #2
+function sumTo (n) {
+	if (n != 1) {
+		return n + sumTo (n - 1);
+	} else {
+		return n;
+	}
+}
+var n = +prompt("Please, enter the n:", 5);
+var sum = sumTo (n);
+console.log(sum);
+
+// #3
+var n = +prompt("Please, enter the n:", 5);
+var sum = (1 + (1 + (n - 1) * 1)) * n / 2;
+console.log(sum);
+
+
+/*Вычислить факториал
+Факториа́л числа – это число, умноженное на «себя минус один», затем на «себя минус два» и так далее, до единицы. Обозначается n
+Задача – написать функцию factorial(n), которая возвращает факториал числа n!, используя рекурсивный вызов.
+Подсказка: обратите внимание, что n! можно записать как n * (n-1)!.*/
+var n = +prompt("Please, enter the n:", 5);
+function factorial(n) {
+	if (n!= 1) {
+		return n * factorial(n - 1);
+	} else {
+		return n;
+	}
+}
+var myFactorial = factorial(n);
+console.log(myFactorial);
+
+
+/*Числа Фибоначчи
+Последовательность чисел Фибоначчи имеет формулу Fn = Fn-1 + Fn-2. То есть, следующее число получается как сумма двух предыдущих.
+Первые два числа равны 1, затем 2(1+1), затем 3(1+2), 5(2+3) и так далее: 1, 1, 2, 3, 5, 8, 13, 21....
+Числа Фибоначчи тесно связаны с золотым сечением и множеством природных явлений вокруг нас.
+Напишите функцию fib(n), которая возвращает n-е число Фибоначчи.*/
+
+// option #1
+var n = +prompt("Please, enter the n:", 5);
+function fib(n) {
+	var el1 = 1;
+	var el2 = 1;
+	for (var i = 3; i <= n; i++) {
+		el2 = el1 + el2;
+		el1 = el2 - el1;
+	}
+	return el2;
+}
+var myFib = fib(n);
+console.log(myFib);
+
+// option #2 РЕШИТЬ!!!
+var n = +prompt("Please, enter the n:", 5);
+function fib(n) {
+	var el1 = 1;
+	var el2 = 1;
+	for (var i = 3; i <= n; i++) {
+		el2 = el1 + el2;
+		el1 = el2 - el1;
+	}
+	return el2;
+}
+var myFib = fib(n);
+console.log(myFib);
