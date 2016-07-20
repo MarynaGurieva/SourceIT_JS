@@ -541,7 +541,6 @@ accumulator.read(); // прибавит ввод prompt к текущему зн
 console.log( accumulator.value ); // выведет текущее значение
 
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ РЕШИТЬ!!!!!
 //Создайте калькулятор
 /*Напишите конструктор Calculator, который создаёт расширяемые объекты-калькуляторы.
 Эта задача состоит из двух частей, которые можно решать одна за другой.
@@ -551,19 +550,21 @@ console.log( accumulator.value ); // выведет текущее значен�
 2).Второй шаг – добавить калькулятору метод addMethod(name, func), который учит калькулятор новой операции. 
 Он получает имя операции name и функцию от двух аргументов func(a,b), которая должна её реализовывать.
 Например, добавим операции умножить *, поделить / и возвести в степень **   */
+
+// task #1
 function Calculator() {
 	var result = 0;
-	var str = null;
-	this.calculate = function(str) {
-		str = str;
+	this.calculate = function(value) {
+		var str = value;
 		if ( str.indexOf("+") != -1 ) {
 			str = str.split("+");
-			for (var i = 0; i < str.length; i++) {
-				str[i] = str[i].trim();
-				result += str[i];
-			};
+			str[0] = +str[0].trim();
+			str[1] = +str[1].trim();
+			result = str[0] + str[1];
 		} else if ( str.indexOf("-") != -1 ) {
 			str = str.split("-");
+			str[0] = +str[0].trim();
+			str[1] = +str[1].trim();
 			result = str[0] - str[1];
 		} else {
 			console.log( "Check your expression: " + str);
@@ -573,10 +574,70 @@ function Calculator() {
 };
 
 var calc = new Calculator();
-console.log( calc.calculate("3 + 7") );		// "03 + 7"
+console.log( calc.calculate("10 + 7") );		// 17
+
+// task #2 - option 1
+function Calculator() {
+	this.calculate = function(value) {
+		var str = value;
+		str = str.split(" ");		// array has three elements, the second one is our "name"
+		var name = str[1];
+		var a = +str[0].trim();
+		var b = +str[2].trim();
+		var result = 0;
+			if (name == "*") {
+				result = a * b;
+			} else if (name == "/") {
+				result = a / b;
+			} else if (name == "**") {
+				result = Math.pow(a, b);
+			} else {
+				result = "Check your expression: " + str;
+			};
+			return result;
+	};
+};
+var powerCalc = new Calculator;
+var result = powerCalc.calculate("2 ** 3");
+console.log( result );
+
+// task #2 - option 2
+function Calculator() {
+	var methods = {
+		"+": function(a, b) {
+			return a + b;
+		},
+		"-": function(a, b) {
+			return a - b;
+		},
+		"*": function(a, b) {
+			return a * b;
+		},
+		"/": function(a, b) {
+			return a / b;
+		},
+		"**": function(a, b) {
+			return Math.pow(a, b);
+		},
+	};
+	this.calculate = function(value) {
+		var str = value;
+		str = str.split(" ");		// array has three elements, the second one is our "name"
+		var name = str[1];
+		var a = +str[0].trim();
+		var b = +str[2].trim();
+		if (!methods[name] || isNaN(a) || isNaN(b)) {
+      		return NaN;
+    	}
+		return methods[name](a, b);		
+		//  если имя свойства хранится в переменной, то единственный способ к нему обратиться – это квадратные скобки methods[name].
+	};
+};
+var powerCalc = new Calculator;
+var result = powerCalc.calculate("2 ** 3");
+console.log( result );
 
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ РЕШИТЬ!!!!!
 // Добавить get/set-свойства
 /*Код объекта User, который хранит имя и фамилию в свойстве this.fullName.
 Имя и фамилия всегда разделяются пробелом.
@@ -595,30 +656,38 @@ function User(fullName) {
 	this.fullName = fullName;
 
 	Object.defineProperty(this, "firstName", {
-		get: function(fullName) {
-			return divideString(fullName)[0];
-		}
+		get: function() {
+			return divideString(this.fullName)[0];
+		},
 		set: function(value) {
-			var arr = [value];
-			arr = arr.push(divideString(fullName)[1]);
-			return joinString(arr);
+			var arr = [];
+			arr.push(value);
+			value = divideString(this.fullName)[1];
+			arr.push(value);
+			this.fullName = joinString(arr);
 		}
 	});
 
-		Object.defineProperty(this, "lastName", {
-		get: function(fullName) {
-			return divideString(fullName)[1];
-		}
+	Object.defineProperty(this, "lastName", {
+		get: function() {
+			return divideString(this.fullName)[1];
+		},
 		set: function(value) {
-			var arr = [value];
-			arr = arr.push(divideString(fullName)[0]);
-			return joinString(arr);
+			var arr = [];
+			arr.push(value);
+			value = this.firstName;		// get firstName
+			arr.unshift(value);
+			this.fullName = joinString(arr);
 		}
 	});
 };
 
 var vasya = new User("Василий Пупкин");
 var kate = new User("Екатерина Иванова");
+console.log(kate.firstName);	// Екатерина
+console.log(vasya.lastName);	// Пупкин
+kate.lastName = "Сидорова";
+console.log(kate.fullName);
 
 
 // Статичные и фабричные методы. Счетчик объектов
