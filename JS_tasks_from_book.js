@@ -417,16 +417,230 @@ function fib(n) {
 var myFib = fib(n);
 console.log(myFib);
 
-// option #2 РЕШИТЬ!!!
+// option #2
 var n = +prompt("Please, enter the n:", 5);
 function fib(n) {
-	var el1 = 1;
-	var el2 = 1;
-	for (var i = 3; i <= n; i++) {
-		el2 = el1 + el2;
-		el1 = el2 - el1;
-	}
-	return el2;
+	return n <= 1 ? n : fib(n - 1) + fib(n - 2);
 }
 var myFib = fib(n);
 console.log(myFib);
+
+
+// Вопросник по преобразованиям, для объектов
+new Date(0) - 0				// 0
+/*new Date(0) – дата, созданная по миллисекундам и соответствующая 0 мс от 1 января 1970 года 00:00:00 UTC. 
+Оператор минус - преобразует дату обратно в число миллисекунд, то есть в 0.*/
+new Array(1)[0] + ""		// "undefined"
+/*new Array(num) при вызове с единственным аргументом-числом создаёт массив данной длины, без элементов. 
+Поэтому его нулевой элемент равен undefined, при сложении со строкой получается строка "undefined".*/
+({})[0]						// undefined
+/*Фигурные скобки – это создание пустого объекта, у него нет свойства '0'. Так что значением будет undefined. 
+Обратите внимание на внешние, круглые скобки. 
+Если их убрать и запустить {}[0] в отладочной консоли браузера – будет 0, т.к. скобки {} будут восприняты как пустой блок кода, после которого идёт массив.*/
+[1] + 1						// "11"
+[1,2] + [3,4]				// "1,23,4"
+[] + null + 1				// "null1"
+[[0]][0][0]					// 0
+/*[[0]] – это вложенный массив [0] внутри внешнего [ ]. Затем мы берём от него нулевой элемент, и потом еще раз.*/
+/*Квадратные скобки после массива/объекта обозначают не другой массив, а взятие элемента.*/
+({} + {})					// "[object Object][object Object]" 
+/*Каждый объект преобразуется к примитиву. 
+У встроенных объектов Object нет подходящего valueOf, поэтому используется toString, 
+так что складываются в итоге строковые представления объектов.*/
+
+
+//Сумма произвольного количества скобок
+// Напишите функцию sum, которая будет работать так:
+/*sum(1)(2) == 3; // 1 + 2
+sum(1)(2)(3) == 6; // 1 + 2 + 3
+sum(5)(-1)(2) == 6
+sum(6)(-1)(-2)(-3) == 0
+sum(0)(1)(2)(3)(4)(5) == 15*/
+// Количество скобок может быть любым.
+var arr = [];
+do {
+	var k = prompt("Please, enter the number of an array:", 1);
+	if (isNumeric(k)) {
+		arr.push(+k);
+	};
+} while (isNumeric(k));
+function isNumeric(n) {
+	return !isNaN(parseFloat(n)) && isFinite(n);
+};
+console.log(arr);
+//debugger;
+function sum(i) {
+	var result = i;
+	function f(j) {
+		result += j;
+		return f;
+	};
+	f.toString = function() {
+		return result;
+	};
+	return f;
+ };
+
+
+// Сумма через замыкание
+// Напишите функцию sum, которая работает так: sum(a)(b) = a+b.
+var a = +prompt("Enter the number a:", 1);
+var b = +prompt("Enter the number b:", 3);
+debugger;
+function sum(a) {
+	return function(b) {
+		return a + b;
+	};
+};
+sum(a)(b);
+
+
+// Создать Calculator при помощи конструктора
+/*Напишите функцию-конструктор Calculator, которая создает объект с тремя методами:
+1). Метод read() запрашивает два значения при помощи prompt и запоминает их в свойствах объекта.
+2). Метод sum() возвращает сумму запомненных свойств.
+3). Метод mul() возвращает произведение запомненных свойств.*/
+function Calculator() {
+	var first = 0;
+	var second = 0;
+	this.read = function() {
+		this.first = +prompt("Please, enter the first number:", 0);
+		this.second = +prompt("Please, enter the second number:", 0);
+	};
+	this.sum = function(first, second) {
+		return this.first + this.second;
+	};
+	this.mul = function(first, second) {
+		return this.first * this.second;
+	};
+};
+
+var calculator = new Calculator();
+calculator.read();
+console.log( "Сумма=" + calculator.sum() );
+console.log( "Произведение=" + calculator.mul() );
+
+
+// Создать Accumulator при помощи конструктора
+/*Напишите функцию-конструктор Accumulator(startingValue). 
+Объекты, которые она создает, должны хранить текущую сумму и прибавлять к ней то, что вводит посетитель.
+Более формально, объект должен:
+Хранить текущее значение в своём свойстве value. Начальное значение свойства value ставится конструктором равным startingValue.
+Метод read() вызывает prompt, принимает число и прибавляет его к свойству value.
+Таким образом, свойство value является текущей суммой всего, что ввел посетитель при вызовах метода read(), с учетом начального значения startingValue.*/
+function Accumulator(startingValue) {
+	this.value = startingValue;
+	this.read = function() {
+		this.value += +prompt("Please, enter the number:", 0);
+	};
+};
+
+var accumulator = new Accumulator(1); // начальное значение 1
+accumulator.read(); // прибавит ввод prompt к текущему значению
+accumulator.read(); // прибавит ввод prompt к текущему значению
+console.log( accumulator.value ); // выведет текущее значение
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ РЕШИТЬ!!!!!
+//Создайте калькулятор
+/*Напишите конструктор Calculator, который создаёт расширяемые объекты-калькуляторы.
+Эта задача состоит из двух частей, которые можно решать одна за другой.
+1). Первый шаг задачи: вызов calculate(str) принимает строку, например «1 + 2», 
+с жёстко заданным форматом «ЧИСЛО операция ЧИСЛО» (по одному пробелу вокруг операции), и возвращает результат. Понимает плюс + и минус -.*/
+/*
+2).Второй шаг – добавить калькулятору метод addMethod(name, func), который учит калькулятор новой операции. 
+Он получает имя операции name и функцию от двух аргументов func(a,b), которая должна её реализовывать.
+Например, добавим операции умножить *, поделить / и возвести в степень **   */
+function Calculator() {
+	var result = 0;
+	var str = null;
+	this.calculate = function(str) {
+		str = str;
+		if ( str.indexOf("+") != -1 ) {
+			str = str.split("+");
+			for (var i = 0; i < str.length; i++) {
+				str[i] = str[i].trim();
+				result += str[i];
+			};
+		} else if ( str.indexOf("-") != -1 ) {
+			str = str.split("-");
+			result = str[0] - str[1];
+		} else {
+			console.log( "Check your expression: " + str);
+		};
+		return result;
+	};
+};
+
+var calc = new Calculator();
+console.log( calc.calculate("3 + 7") );		// "03 + 7"
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ РЕШИТЬ!!!!!
+// Добавить get/set-свойства
+/*Код объекта User, который хранит имя и фамилию в свойстве this.fullName.
+Имя и фамилия всегда разделяются пробелом.
+Сделайте, чтобы были доступны свойства firstName и lastName, причём не только на чтение, но и на запись.
+Важно: в этой задаче fullName должно остаться свойством, а firstName/lastName – реализованы через get/set. 
+Лишнее дублирование здесь ни к чему*/
+
+function divideString(value) {
+	return value.split(" ");		// return array [firstName] [lastName]
+};
+function joinString(value) {
+	return value.join(" ");			// return string "firstName lastName"
+};
+
+function User(fullName) {
+	this.fullName = fullName;
+
+	Object.defineProperty(this, "firstName", {
+		get: function(fullName) {
+			return divideString(fullName)[0];
+		}
+		set: function(value) {
+			var arr = [value];
+			arr = arr.push(divideString(fullName)[1]);
+			return joinString(arr);
+		}
+	});
+
+		Object.defineProperty(this, "lastName", {
+		get: function(fullName) {
+			return divideString(fullName)[1];
+		}
+		set: function(value) {
+			var arr = [value];
+			arr = arr.push(divideString(fullName)[0]);
+			return joinString(arr);
+		}
+	});
+};
+
+var vasya = new User("Василий Пупкин");
+var kate = new User("Екатерина Иванова");
+
+
+// Статичные и фабричные методы. Счетчик объектов
+/*Добавить в конструктор Article:
+Подсчёт общего количества созданных объектов.
+Запоминание даты последнего созданного объекта.
+Используйте для этого статические свойства.
+Пусть вызов Article.showStats() выводит то и другое.*/
+
+Article.counter = 0;
+function Article() {
+  this.created = new Date();
+  Article.counter++;
+  Article.created = this.created;
+};
+
+Article.showStats = function() {
+	return console.log("Statistics: \ncounter " + Article.counter + ";\nlast created " + Article.created);
+};
+
+new Article();
+new Article();
+Article.showStats(); // Всего: 2, Последняя: (дата)
+new Article();
+Article.showStats(); // Всего: 3, Последняя: (дата)
