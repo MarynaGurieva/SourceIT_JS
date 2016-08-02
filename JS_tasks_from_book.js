@@ -713,3 +713,14 @@ new Article();
 Article.showStats(); // Всего: 2, Последняя: (дата)
 new Article();
 Article.showStats(); // Всего: 3, Последняя: (дата)
+
+
+/*Превратите объект в JSON*/
+var leader = {
+  name: "Василий Иванович",
+  age: 35
+};
+var str = JSON.stringify(leader);		// "{"name":"Василий Иванович","age":35}"
+str = "{"name":"Василий Иванович","age":35}"
+str = JSON.parse(str);					// Object {name: "Василий Иванович", age: 35}
+
