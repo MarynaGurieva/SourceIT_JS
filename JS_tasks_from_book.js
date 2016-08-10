@@ -724,3 +724,122 @@ var str = JSON.stringify(leader);		// "{"name":"Василий Иванович"
 str = "{"name":"Василий Иванович","age":35}"
 str = JSON.parse(str);					// Object {name: "Василий Иванович", age: 35}
 
+
+/*Добавьте всем функциям в прототип метод defer(ms), который откладывает вызов функции на ms миллисекунд.*/
+Function.prototype.defer = function(value) {
+	return setTimeout( function() {
+		f();
+	}, value);
+};
+
+
+function f() {
+  console.log( "привет" );
+}
+
+f.defer(5000); // выведет "привет" через 5 секунд
+
+Function.prototype.defer = function(ms) {
+  setTimeout(this, ms);
+}
+
+function f() {
+  alert( "привет" );
+}
+
+// ~~~~~~~~РЕШИТЬ!!!
+/*Добавьте всем функциям в прототип метод defer(ms), который возвращает обёртку, 
+откладывающую вызов функции на ms миллисекунд.*/
+Function.prototype.defer = function(ms) {
+  setTimeout(this.bind(this, a, b), ms);
+};
+
+function f(a, b) {
+  console.log( a + b );
+}
+
+f.defer(5000)(1, 2); // выведет 3 через 5 секунд.
+
+
+/*
+Перепишите в виде класса
+Есть класс CoffeeMachine, заданный в функциональном стиле.
+Задача: переписать CoffeeMachine в виде класса с использованием прототипа.
+Исходный код:
+*/
+function CoffeeMachine(power) {
+  var waterAmount = 0;
+
+  var WATER_HEAT_CAPACITY = 4200;
+
+  function getTimeToBoil() {
+    return waterAmount * WATER_HEAT_CAPACITY * 80 / power;
+  }
+
+  this.run = function() {
+    setTimeout(function() {
+      alert( 'Кофе готов!' );
+    }, getTimeToBoil());
+  };
+
+  this.setWaterAmount = function(amount) {
+    waterAmount = amount;
+  };
+
+};
+
+
+function CoffeeMachine(power) {
+	// свойства конкретной кофеварки
+	this._waterAmount = 0;
+	this._power = power;
+};
+// свойства и методы для всех объектов класса
+CoffeeMachine.prototype.WATER_HEAT_CAPACITY = 4200;
+
+CoffeeMachine.prototype.run = function() {
+	setTimeout( function() {
+		console.log(" Coffee is ready!")
+	}, this._getTimeToBoil());
+};
+
+CoffeeMachine.prototype.setWaterAmount = function(amount) {
+	this._waterAmount = amount;
+};
+
+CoffeeMachine.prototype._getTimeToBoil = function() {
+	return this._waterAmount * this._WATER_HEAT_CAPACITY * 80 / this._power;
+};
+
+
+var coffeeMachine = new CoffeeMachine(10000);
+coffeeMachine.setWaterAmount(50);
+coffeeMachine.run();
+
+
+// Хомяки с __proto__
+/*Вы – руководитель команды, которая разрабатывает игру, хомяковую ферму. 
+Один из программистов получил задание создать класс «хомяк» (англ – "Hamster").
+Объекты-хомяки должны иметь массив food для хранения еды и метод found для добавления.
+Ниже – его решение. При создании двух хомяков, если поел один – почему-то сытым становится и второй тоже.
+В чём дело? Как поправить?*/
+function Hamster(name) {
+	this._name = name;
+	this._food = [];
+};
+
+// Hamster.prototype.food = []; // пустой "живот"
+
+Hamster.prototype.found = function(something) {
+  this._food.push(something);
+};
+
+// Создаём двух хомяков и кормим первого
+var speedy = new Hamster('speedy');
+var lazy = new Hamster('lazy');
+
+speedy.found("яблоко");
+speedy.found("орех");
+
+console.log( speedy._food.length ); // 2
+console.log( lazy._food.length ); // 0
