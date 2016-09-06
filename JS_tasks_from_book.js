@@ -843,3 +843,65 @@ speedy.found("орех");
 
 console.log( speedy._food.length ); // 2
 console.log( lazy._food.length ); // 0
+
+// Проверка существования детей
+/*Придумайте самый короткий код для проверки, пуст ли элемент elem.
+«Пустой» – значит нет дочерних узлов, даже текстовых.*/
+if (elem.childNodes[0] == null) { 
+	console.log("узел elem пуст") 
+} else {
+	console.log(elem.childNodes[0])
+};
+
+// Выделите ячейки по диагонали
+/*Напишите код, который выделит все ячейки в таблице по диагонали.*/
+// в переменной td DOM-элемент для тега <td>
+for (var i = 0; i < table.rows.length; i++) {
+	table.rows[i].cells[i].style.backgroundColor = 'red';
+}
+
+
+// Поиск элементов
+// Ниже находится документ с таблицей и формой.
+// Найдите (получите в переменную) в нём:
+//* Все элементы label внутри таблицы. Должно быть 3 элемента.
+var table = document.getElementById('age-table');
+console.log(table.querySelectorAll('label'));
+//* Первую ячейку таблицы (со словом "Возраст").
+console.log(table.rows[0].cells[0]);
+//* Вторую форму в документе.
+var forms = document.querySelectorAll('form');
+forms[1];
+//* Форму с именем search, без использования её позиции в документе.
+for (var i = 0; i < forms.length; i++) {
+	if (forms[i].name == 'search') {
+		var fs = forms[i];
+		console.log(fs);
+	}
+}
+document.querySelector('form[name="search"]');
+//* Элемент input в форме с именем search. Если их несколько, то нужен первый.
+fs.getElementsByTagName('input')[0];
+fs.querySelector('input');
+document.querySelector('form[name="search"] input')
+//* Элемент с именем info[0], без точного знания его позиции в документе.
+document.getElementsByName('info[0]');
+document.getElementsByName("info[0]")[0];
+//* Элемент с именем info[0], внутри формы с именем search-person.
+document.querySelector('form[name="search-person"] [name="info[0]"]');
+
+
+// Дерево
+// Есть дерево из тегов <ul>/<li>.
+//Напишите код, который для каждого элемента <li> выведет:
+//*Текст непосредственно в нём (без подразделов).
+//*Количество вложенных в него элементов <li> – всех, с учётом вложенных.
+var arr = document.querySelectorAll('li');
+function find = function(arr) {
+	for (var i = 0; i < arr.length; i++) {
+		if (!arr.hasChildNodes) {
+			this.arr = arr.childNodes;
+			find()
+		}
+	}
+}

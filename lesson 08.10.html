@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="wrapper">
+    	<form action="#">
+	      	<div class="row">
+	        	<label for="user-name">Name</label>
+	        	<input id="user-name" type="text" name="user_name" placeholder="Enter name">
+	        	<!-- Добавить placeholder -->
+	      	</div>
+	      	<br>
+	      	<div class="row">
+	        	<label for="pass">Password</label>
+	        	<input id="pass" type="password" name="pass">
+	      	</div>
+	      	<br>
+	      	<div class="row">
+	        	<input type="submit" value="Отправить форму">
+	      	</div>
+    	</form>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+/*	var form = document.getElementsByTagName('form');
+	form = form.length ? form[0] : null;
+
+	var rows = form.getElementsByClassName('row');
+	console.log(rows);*/
+
+	// var rows = findByClass(element, ’row');
+	/*Написать ф-цию, которая будет искать элементы по классу, 
+	т.е. эмулировать поведение getElementsByClassName*/
+	function findByClass(toFind, element) {
+		element = element || document;
+		var result = [];
+		var all = document.getElementsByTagName('*');
+		for (var i = 0; i < all.length; i++) {
+/*			if (all[i].className.indexOf(toFind) != -1) {
+				result.push(all[i]);
+			};*/
+			var currentElement = all[i];
+
+			if (currentElement.className) {		// если пустая строка = тогда ноль = false
+				var classList = currentElement.className.split(" ");
+				for (var j = 0; j < classList.length; j++) {
+					if (classList[j] == toFind) {
+						result.push(currentElement);
+						break;
+					};
+				};
+			};
+		};
+		return result;
+	};
+	var wrap = document.getElementById("wrapper");
+	var rows = findByClass("row", wrap);
+	console.log(rows);
+
+</script>

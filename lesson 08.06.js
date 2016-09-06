@@ -31,7 +31,7 @@ window.location.href = "https://google.com";
 // нельзя получить доступ к списку посещенных страниц (security)
 window.history;
 history.back();		// с помощью JS "нажимаешь" кнопки вперёд-назад
-history.Forward();
+history.forward();
 
 window.XMLHttpRequest;		// объект для создания синхронных запросов между клиентом и сервером
 // без перзагрузки страницы AJAX
@@ -52,16 +52,17 @@ console.dir(elem);
 
 // Навигация по DOM-элементам
 // дочерний элемент - это вложенный в родительский
-// скрипты размещать последними элементами перд </body>, иначе не пройдет HTML-валидацию
+// скрипты размещать последними элементами перед </body>, иначе не пройдет HTML-валидацию
 
 // смоттреть "условный комментарий"
 
 // ДЗ создать табличку 10х10 и попробовать все методы "Особые ссылки для таблиц"
 
 // получить элемент - через селект (метод document)
-document.getElementById("wrapper");				// возвращает один элемент
-document.getElementsByTegName("span");				// много элементов будут возвращены псевдомассивом (смотреть через console.dir())
-document.getElementByClassName("title");	
+document.getElementById("wrapper");				// возвращает один элемент; существует только в контексте document
+document.getElementsByTagName("span");			// может искать внутри любого элемента
+// много элементов будут возвращены псевдомассивом (смотреть через console.dir())
+document.getElementsByClassName("title");	
 document.getElementsByName("");			// у формы
-document.querySelector(".title");		// всегда возвращает коллекцию в виде массива, если не найдено - пустой массив
-document.querySelectorAll(".title");	
+document.querySelector(".title");		
+document.querySelectorAll(".title");	// всегда возвращает коллекцию в виде массива, если не найдено - пустой массив

@@ -1,0 +1,35 @@
+<!-- DOM children -->
+<!-- Напишите код, который получит элемент HEAD. -->
+<!-- Напишите код, который получит UL. -->
+<!-- Напишите код, который получит второй LI.  -->
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <div>Пользователи:</div>
+  <ul>
+    <li>Маша</li>
+    <li>Вовочка</li>
+  </ul>
+
+  <!-- комментарий -->
+
+  <script>
+    var head = document.documentElement.firstElementChild;
+    console.log(head);
+
+    var ul = document.body.firstElementChild.nextElementSibling;
+    console.log(ul);
+
+    var li2 = ul.lastElementChild;
+    console.log(li2);
+    console.log("Finish the 1st task")
+  </script>
+
+</body>
+
+</html>
