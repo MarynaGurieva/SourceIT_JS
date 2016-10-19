@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>test</title>
+	<link rel="stylesheet" href="draftPositioningStyles.css">
+</head>
+<body>
+	Before Before Before<div id="moving-div">Text Text Text<br>Text Text Text<br></div>After After After
+	<script type="text/javascript">
+		var div = document.getElementById('moving-div');
+		div.style.position = 'absolute';
+		div.style.right = div.style.top = 0;
+		var styles = getComputedStyle(div);
+		var div2 = div.cloneNode(false);
+		div2.style.position = '';
+		div2.style.borderColor = 'silver';
+		div2.style.backgroundColor = 'silver';
+		div2.style.height = styles.height;
+		document.body.insertBefore(div2, div.nextSibling);
+	</script>
+	<div class="AgileManifesto">
+		<p>The Manifesto for Agile Software Development is a compact 68 words (now that’s lightweight!) that stresses four values.</p>
+		<h1>Manifesto for Agile Software Development</h1>
+		<p>We are uncovering better ways of developing software by doing it and helping others do it. Through this work we have come to value:</p>
+		<p><strong>Individuals and interactions</strong> over processes and tools</p>
+		<p><strong>Working software</strong> over comprehensive documentation</p>
+		<p><strong>Customer collaboration</strong> over contract negotiation</p>
+		<p><strong>Responding to change</strong> over following a plan</p>
+		<h2>Individuals and interactions over processes and tools</h2>
+		<p>Recognizing that software is made by people, not processes or tools, agile places a higher premium on people working together effectively. Processes and tools can aid in that but can’t replace it.</p>
+		<h2>Working software over comprehensive documentation</h2>
+		<p>Valuing working software over comprehensive documentation stands in stark opposition to the Waterfall model. A highly detailed, accurate, and comprehensive specification document is of no value if it doesn’t result in working software that meets users’ needs. Working software may involve documentation, but agile only uses it in service to creating working software, not as an end (almost) unto itself.</p>
+		<h2>Customer collaboration over contract negotiation</h2>
+		<p>While agile isn’t ignoring the reality of contracts, it values active collaboration throughout the software development process as a better way to deliver value instead of a carefully worded contract. A contract is no proxy for actual communication when you’re doing something as challenging as creating software.</p>
+		<h2>Responding to change over following a plan</h2>
+		<p>Except for the most incredibly simple systems, it’s massively difficult to think of every feature, every piece of data, and every possible use case for software. That means, in a collaborative process with the customer, a lot is discovered during the process of developing software. Also, the world changes pretty fast: Business needs and priorities can shift in the months or even years it can take for a large system to be fully built. Agile values the ability to change in response to new discoveries and needs over sticking to a plan created before everything was known.</p>
+	</div>
+	<div id="field">
+		<img src="https://js.cx/clipart/ball.svg" id="ball">
+	</div>
+	<script type="text/javascript">
+		var ballWidth = ball.offsetWidth;
+		var ballHeight = ball.offsetHeight;
+		var fieldWidth = field.clientWidth;
+		var fieldHeight = field.clientHeight;
+		ball.style.left = fieldWidth / 2 - ballWidth / 2 + 'px';
+		ball.style.top = fieldHeight / 2 - ballHeight / 2 + 'px';
+		var ballStyles = getComputedStyle(ball);
+		console.log('ball size: ' + ballWidth + "x" + ballHeight);
+		console.log('field size: ' + fieldWidth + "x" + fieldHeight);
+		if (ballStyles.right === ballStyles.left) {
+			console.log("from the left and the right field sides: " + ballStyles.right);
+		} else {
+			console.log("from the left field side: " +  ballStyles.left);
+			console.log("from the right field side: " +  ballStyles.right);
+		};
+		if (ballStyles.top === ballStyles.bottom) {
+			console.log("from the top and the bottom field sides: " + ballStyles.top);
+		} else {
+			console.log("from the top field side: " +  ballStyles.top);
+			console.log("from the bottom field side: " +  ballStyles.bottom);
+		};
+	</script>
+	<section id="bodyEl">
+		<div id="elem">
+			<h1>The 12 principles that drive the Agile Manifesto</h1>
+			<p>The people who wrote the Agile Manifesto later assembled 12 principles that inform and reinforce the manifesto. These further illuminate the things agile values in software development.</p>
+			<p>The Agile Manifesto follows these principles:</p>
+			<ol>
+				<li>The highest priority is to satisfy the customer through early and continuous delivery of valuable software.</li>
+				<li>Welcome changing requirements, even late in development. Agile processes harness change for the customer’s competitive advantage.</li>
+				<li>Deliver working software frequently, from a couple of weeks to a couple of months, with a preference to the shorter timescale.</li>
+				<li>Business people and developers must work together daily throughout the project.</li>
+				<li>Build projects around motivated individuals. Give them the environment and support they need, and trust them to get the job done.</li>
+				<li>The most efficient and effective method of conveying information to and within a development team is face-to-face conversation.</li>
+				<li>Working software is the primary measure of progress.</li>
+				<li>Agile processes promote sustainable development. The sponsors, developers, and users should be able to maintain a constant pace indefinitely.</li>
+				<li>Continuous attention to technical excellence and good design enhances agility.</li>
+				<li>Simplicity — the art of maximizing the amount of work not done — is essential.</li>
+				<li>The best architectures, requirements, and designs emerge from self-organizing teams.</li>
+				<li>At regular intervals, the team reflects on how to become more effective and then tunes and adjusts its behavior accordingly.</li>
+			</ol>
+		</div>
+	</section>
+	<script type="text/javascript">
+		var bodyWidth = parseInt(getComputedStyle(bodyEl).width);
+		var elemStyles = getComputedStyle(elem);
+		var elemBorder = parseInt(elemStyles.borderRightWidth) + parseInt(elemStyles.borderLeftWidth);
+		var elemMargin = parseInt(elemStyles.marginLeft) + parseInt(elemStyles.marginRight);
+		var elemPadding = parseInt(elemStyles.paddingLeft) + parseInt(elemStyles.paddingRight);
+		var newWidth = bodyWidth - (elemBorder + elemMargin + elemPadding);
+		elem.style.width = newWidth + 'px';
+	</script>
+</body>
+</html>

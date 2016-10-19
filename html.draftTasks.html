@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>test</title>
+	<link rel="stylesheet" href="draftTasksStyles.css">
+</head>
+<body>
+	<div id="widget" data-widget-name="menu">Выберите жанр</div>
+	<script>
+	var elem = document.getElementById('widget');
+	console.log('elem variable: ');
+	console.log(elem);
+	var name = elem.dataset.widgetName;
+	console.log('data-widget-name: ');
+	console.log(name);
+	</script>
+
+	<a name="list">список</a>
+	<ul id="list">
+	  <li><a href="http://google.com">http://google.com</a></li>
+	  <li><a href="/tutorial">/tutorial.html</a></li>
+	  <li><a href="local/path">local/path</a></li>
+	  <li><a href="ftp://ftp.com/my.zip">ftp://ftp.com/my.zip</a></li>
+	  <li><a href="http://nodejs.org">http://nodejs.org</a></li>
+	  <li><a href="http://internal.com/test">http://internal.com/test</a></li>
+	</ul>
+<!-- Сделайте желтыми внешние ссылки, добавив им класс external.
+Все ссылки без href, без протокола и начинающиеся с http://internal.com считаются внутренними. -->
+	<script>
+		var links = document.getElementsByTagName('a');
+		console.log(links);
+		for (var i = 0; i < links.length; i++) {
+			if (links[i].hasAttribute('href')) {
+				var text = links[i].getAttribute('href');
+				if (text.indexOf('://') + 1) {
+					if (text.indexOf('http://internal.com') + 1) continue;
+					var ok = links[i].className = 'external';
+					console.log('external link: ' + links[i].textContent);
+				}
+			}
+		}
+	</script>
+	<div id="insAfter">
+		<p>Element #1</p>
+		<p>Element #2</p>
+		<p>Element #3</p>
+		<p>Element #4</p>		
+	</div>
+	<script>
+		var elem = document.createElement('div');
+  		elem.innerHTML = '<b>Element #5</b>';
+  		function insertAfter(elem, refElem) {
+			refElem.parentNode.insertBefore(elem, refElem.nextElementSibling);
+  		};
+  		var body = insAfter;
+  		// вставить elem за последним элементом
+  		insertAfter(elem, body.lastChild);
+	</script>
+	<table id="table">
+		<tr>
+			<td>column #1</td>
+	    	<td>column #2</td>
+	    	<td>column #3</td>
+	  	</tr>
+	</table>
+	<ol id="ol">
+		<li>the first element</li>
+		<li>the second element</li>
+		<li>the third element</li>
+		<li>and others...</li>
+	</ol>
+	<div id="userList">
+		<p><b>User List:</b></p>
+	</div>
+	<script type="text/javascript">
+		var list = document.createElement('ul');
+		list.setAttribute('id', "ulList") 
+		userList.appendChild(list);
+		while (true) {
+			var elemList = prompt("Enter the data:", "no data");
+			if (elemList === null || elemList === '') break;
+			var newLi = document.createElement('li');
+			ulList.appendChild(newLi);
+			newLi.innerText = elemList;	
+		};
+	</script>
+<!-- clock -->
+	<script type="text/javascript">
+		var timer = document.createElement('section');
+		var block1 = document.createElement('div');
+		block1.setAttribute('id', 'hour');
+		var block2 = document.createElement('div');
+		block2.setAttribute('id', 'minute');
+		var block3 = document.createElement('div');
+		block3.setAttribute('id', 'second');
+		timer.appendChild(block1);
+		timer.appendChild(block2);
+		timer.appendChild(block3);
+		document.body.insertBefore(timer, document.body.firstElementChild);
+		function getCurrentTime() {
+			var date = new Date();
+			var hours = date.getHours();
+			var minutes = date.getMinutes();
+			var seconds = date.getSeconds();
+			if (hours < 10) {
+				hour.innerHTML = '0' + hours + ':';
+			} else {
+				hour.innerHTML = hours + ':';
+			};
+			if (minutes < 10) {
+				minute.innerHTML = '0' + minutes + ':';
+			} else {
+				minute.innerHTML = minutes + ':';
+			};
+			if (seconds < 10) {
+				second.innerHTML = '0' + seconds;
+			} else {
+				second.innerHTML = seconds;
+			};
+		};
+		var timerId = setInterval(getCurrentTime, 1000);
+	// create button StopClock
+		var buttonBackground = document.createElement('form');
+		buttonBackground.setAttribute('class', 'clockButtons');
+		var button = document.createElement('input');
+		button.setAttribute('type', 'button');
+		button.setAttribute('value', 'stop clock');
+		buttonBackground.appendChild(button);
+		document.body.insertBefore(buttonBackground, timer.nextSibling);
+		button.onclick = function() {
+			clearInterval(timerId);
+			button.setAttribute('value', 'clock was stopped');
+		}
+	// create button StartClock
+		var buttonOnClock = document.createElement('input');
+		buttonOnClock.setAttribute('type', 'button');
+		buttonOnClock.setAttribute('value', 'start clock');
+		var parentElement = document.body.getElementsByClassName('clockButtons')[0];
+		parentElement.appendChild(buttonOnClock);
+	</script>
+</body>
+</html>

@@ -897,11 +897,625 @@ document.querySelector('form[name="search-person"] [name="info[0]"]');
 //*Текст непосредственно в нём (без подразделов).
 //*Количество вложенных в него элементов <li> – всех, с учётом вложенных.
 var arr = document.querySelectorAll('li');
-function find = function(arr) {
-	for (var i = 0; i < arr.length; i++) {
-		if (!arr.hasChildNodes) {
-			this.arr = arr.childNodes;
-			find()
+arr.forEach(function(entry) {
+	console.log(entry.innerHTML);
+});
+arr.length;
+var arrUl = document.querySelectorAll('ul');
+arrUl.forEach(function(entry) {
+	var num = entry.querySelectorAll('li').length;
+	console.log("ul" +" has " + num + " li-elements");
+});
+
+
+// Бенчмаркинг методов поиска в DOM
+/*Какой метод поиска элементов работает быстрее: getElementsByTagName(tag) или querySelectorAll(tag)?
+Напишите код, который измеряет разницу между ними.*/
+function bench(func, times) {
+	var d = new Date();
+	for (var i = 0; i < times; i++) {
+		func();
+	};
+	return new Date() - d;
+};
+function selectByTagName() {
+	var elems = document.getElementsByTagName('li');
+	var len = elems.length;
+	for (var i = 0; i < len; i++) {
+		var elem = elems[i];
+	};
+};
+function selectSelectorAll() {
+	var elems = document.querySelectorAll('li');
+	var len = elems.length;
+	for (var i = 0; i < len; i++) {
+		var elem = elems[i];
+	};
+};
+console.log("getElementsByTagName: " + bench(selectByTagName, 5000))
+console.log("querySelectorAll: " + bench(selectSelectorAll, 5000))
+
+
+// Получить второй LI
+/*Есть длинный список ul.
+Как наиболее эффективно получить второй LI?*/
+var arrUl = document.querySelectorAll('ul');
+arrUl.forEach(function(entry) {
+	var elems = entry.getElementsByTagName('li');
+	console.log(elems[1]);
+});
+
+// Полифилл для matches
+/*Метод elem.matches(css) в некоторых старых браузерах поддерживается под старым именем matchesSelector или с префиксами, 
+то есть: webkitMatchesSelector (старый Chrome, Safari), mozMatchesSelector (старый Firefox) или 
+Element.prototype.msMatchesSelector (старый IE).
+Создайте полифилл, который гарантирует стандартный синтаксис elem.matches(css) для всех браузеров.*/
+(function() {
+	if (!Element.prototype.matches) {
+		Element.prototype.matches = Element.prototype.atcgesSelector ||
+			Element.prototype.webkitMatchesSelector ||
+			Element.prototype.mozMatchesSelector ||
+			Element.prototype.msMatchesSelector;
+
+		};
+	};
+})();
+
+// Полифилл для closest
+/*Метод elem.closest(css) для поиска ближайшего родителя, удовлетворяющего селектору css, 
+не поддерживается некоторыми браузерами, например IE11-.
+Создайте для него полифилл.*/
+(function() {
+	if (!Element.prototype.closest) {
+		Element.prototype.closest = function(css) {
+			var elem = this;
+			while (elem) {
+				if (elem.matches(css)) return elem;
+				else elem = elem.parentElement;
+			};
+			return null;
+		};
+	};
+})();
+
+
+// Полифилл для textContent
+/*Свойство textContent не поддерживается IE8. Однако, там есть свойство innerText.
+Создаёте полифилл, который проверяет поддержку свойства textContent, и если её нет – создаёт его, используя innerText. 
+Получится, что в IE8 «новое» свойство textContent будет «псевдонимом» для innerText.
+Хотя свойство innerText и работает по-иному, нежели textContent, но в некоторых ситуациях они могут быть взаимозаменимы. 
+Именно на них направлен полифилл.*/
+(function() {
+	if (document.documentElement.textContent === undefined) {
+		Object.defineProperty(HTMLElement.prototype, "textContent", {
+			set: function(value) {
+				this.innerText = value;
+			},
+			get: function() {
+				return this.innerText;
+			}
+		});
+	};
+})();
+
+
+// Получите пользовательский атрибут
+/*Получите div в переменную.
+Получите значение атрибута "data-widget-name" в переменную.
+Выведите его.*/
+//<body>
+//  <div id="widget" data-widget-name="menu">Выберите жанр</div>
+//<script>
+	var elem = document.getElementById('widget');
+	console.log('elem variable: ');
+	console.log(elem);
+	var name = elem.dataset.widgetName;
+	console.log('data-widget-name: ');
+	console.log(name);
+//</script>
+//</body>
+
+
+// Поставьте класс ссылкам
+/*Сделайте желтыми внешние ссылки, добавив им класс external.
+Все ссылки без href, без протокола и начинающиеся с http://internal.com считаются внутренними.*/
+		var links = document.getElementsByTagName('a');
+		console.log(links);
+		for (var i = 0; i < links.length; i++) {
+			if (links[i].hasAttribute('href')) {
+				var text = links[i].getAttribute('href');
+				if (text.indexOf('://') + 1) {
+					if (text.indexOf('http://internal.com') + 1) continue;
+					var ok = links[i].className = 'external';
+					console.log('external link: ' + links[i].textContent);
+				}
+			}
+		}
+
+
+// Удаление элементов
+/*Напишите полифилл для метода remove для старых браузеров.
+Вызов elem.remove():
+- Если у elem нет родителя – ничего не делает.
+- Если есть – удаляет элемент из родителя.*/
+var elem = list.firstElementChild;
+;(function() {
+	if (!Element.prototype.remove) {
+		Element.prototype.remove = function remove() {
+			if (this.parentNode) {
+				this.parentNode.removeChild(this);
+				console.log('element has been deleted')
+			} else {
+				console.log('this element doesn\'t have a parent');
+			};
 		}
 	}
+})();
+
+
+// ertAfter
+/*Напишите функцию insertAfter(elem, refElem), которая добавит elem после узла refElem.*/
+var elem = document.createElement('div');
+elem.innerHTML = '<b>Element #5</b>';
+function insertAfter(elem, refElem) {
+  	refElem.parentNode.insertBefore(elem, refElem.nextElementSibling);
 }
+var body = insAfter;
+ 		// вставить elem после первого элемента
+insertAfter(elem, body.firstElementChild); // <--- должно работать
+  		// вставить elem за последним элементом
+insertAfter(elem, body.lastElementChild); // <--- должно работать
+
+// removeChildren
+/*Напишите функцию removeChildren, которая удаляет всех потомков элемента.*/
+function removeChildren(elem) {
+  while (elem.lastChild) {
+    elem.removeChild(elem.lastChild);
+  }
+	console.log('Element nas been cleared');
+}
+removeChildren(table); // очищает таблицу
+removeChildren(ol); // очищает список
+
+
+
+//Вставьте элементы в конец списка
+/*Напишите код для вставки текста html в конец списка ul с использованием метода insertAdjacentHTML. 
+Такая вставка, в отличие от присвоения innerHTML+=, не будет перезаписывать текущее содержимое.
+Добавьте к списку ниже элементы <li>3</li><li>4</li><li>5</li>:*/
+// create two points of the exist list
+var ul = document.createElement('ul');
+for (var i = 0; i < 2; i++) {
+	var li = document.createElement("li");
+	li.innerHTML = i + 1;
+	ul.appendChild(li);
+};
+document.body.appendChild(ul);
+// add new three elements to the list
+ul.insertAdjacentHTML('beforeEnd', "<li>3</li><li>4</li><li>5</li>");
+
+
+// Отсортировать таблицу
+/*Есть таблица.
+Строк в таблице много: может быть 20, 50, 100… Есть и другие элементы в документе.
+Как бы вы предложили отсортировать содержимое таблицы по полю Возраст? Обдумайте алгоритм, реализуйте его.
+Как сделать, чтобы сортировка работала как можно быстрее? А если в таблице 10000 строк (бывает и такое)?
+P.S. Может ли здесь помочь DocumentFragment?
+P.P.S. Если предположить, что у нас заранее есть массив данных для таблицы в JavaScript – что быстрее: 
+отсортировать эту таблицу или сгенерировать новую*/
+// create a table
+var table = document.createElement('table');
+table.setAttribute('id', 'table');
+var thead = document.createElement('thead');
+var trH = document.createElement('tr');
+thead.appendChild(trH);
+for (var i = 0; i < 3; i++) {
+	var th = document.createElement('th');
+	th.setAttribute('scope', 'col');
+	if (i + 1 == 1) th.innerHTML = "First Name";
+	if (i + 1 == 2) th.innerHTML = "Last Name";
+	if (i + 1 == 3) th.innerHTML = "Age";
+	trH.appendChild(th);
+};
+table.appendChild(thead);
+var tbody = document.createElement('tbody');
+for (var i = 0; i < 5; i++) {
+	var trB = document.createElement('tr');
+	for (var j = 0; j < 3; j++) {
+		var td = document.createElement('td');
+		if (j + 1 == 1) td.innerHTML = "Ivanov";
+		if (j + 1 == 2) td.innerHTML = "Peter";
+		if (j == 2 && i == 0) td.innerHTML = "25";
+		if (j == 2 && i == 1) td.innerHTML = "45";
+		if (j == 2 && i == 2) td.innerHTML = "18";
+		if (j == 2 && i == 3) td.innerHTML = "50";
+		if (j == 2 && i == 4) td.innerHTML = "45";
+		trB.appendChild(td);
+	};
+	tbody.appendChild(trB);
+};
+table.appendChild(tbody);
+document.body.appendChild(table);
+// sort over the age
+function compareAge(elementA, elementB) {
+	return elementA.age - elementB.age;
+};
+var fragment = document.createDocumentFragment();
+var tbodySort = tbody.cloneNode(false);
+var arrRows = [];
+var numR = table.children[1].children.length;
+for (var k = 0; k < numR; k++) {
+	var objRow = {};
+	objRow.index = k;
+	objRow.content = table.children[1].children[k].cloneNode(true);
+	objRow.age = +table.children[1].children[k].children[2].innerText;
+	arrRows.push(objRow);
+	console.log(objRow);
+};
+arrRows.sort(compareAge);
+console.log(arrRows);
+for (var z = 0; z < numR; z++) {
+	tbodySort.appendChild(arrRows[z].content);
+};
+fragment.appendChild(tbodySort);
+table.removeChild(tbody);
+table.appendChild(fragment);
+
+
+// Создать список
+/*Напишите интерфейс для создания списка.
+Для каждого пункта:
+Запрашивайте содержимое пункта у пользователя с помощью prompt.
+Создавайте пункт и добавляйте его к UL.
+Процесс прерывается, когда пользователь нажимает ESC или вводит пустую строку.
+Все элементы должны создаваться динамически.
+Если посетитель вводит теги – пусть в списке они показываются как обычный текст.*/
+var list = document.createElement('ul');
+list.setAttribute('id', "ulList") 
+userList.appendChild(list);
+while (true) {
+	var elemList = prompt("Enter the data:", "no data");
+	if (elemList === null || elemList === '') break;
+	var newLi = document.createElement('li');
+	ulList.appendChild(newLi);
+	newLi.innerText = elemList;	
+};
+
+
+// Создайте дерево из объекта
+/*Напишите функцию, которая создаёт вложенный список UL/LI (дерево) из объекта.
+Варианты:
+-- Создать строку, а затем присвоить через container.innerHTML.
+-- Создавать узлы через методы DOM.
+P.S. Желательно, чтобы в дереве не было лишних элементов, в частности – пустых <ul></ul> на нижнем уровне.*/
+var data = {
+  "Рыбы": {
+    "Форель": {},
+    "Щука": {},
+    "Карась": 5
+  },
+
+  "Деревья": {
+    "Хвойные": {
+      "Лиственница": {},
+      "Ель": {},
+      "Сосна": 1
+    },
+    "Цветковые": {
+      "Берёза": {},
+      "Тополь": {}
+    }
+  }
+};
+var container = document.createElement('div');
+container.setAttribute('id', 'container');
+document.body.appendChild(container);
+var parent = container;
+var createTree = function(container, data) {
+	if (Object.keys(data).length == 0) return;
+	var dataList = document.createElement('ul');
+	parent.appendChild(dataList);
+	for (var key in data) {
+		parent = dataList;
+		var point = document.createElement('li');
+		point.innerHTML = key;
+		parent.appendChild(point);
+		if (data[key] instanceof Object) {
+			parent = point;
+			createTree(container, data[key]);
+		};
+	};
+};
+createTree(container, data);
+
+// Дерево
+/*Есть дерево, организованное в виде вложенных списков <ul>/<li>.
+Напишите код, который добавит каждому элементу списка <li> количество вложенных в него элементов. 
+Узлы нижнего уровня, без детей – пропускайте.*/
+var arrLi = container.querySelectorAll('li');
+arrLi.forEach( function(data) {
+	var number = data.getElementsByTagName('li').length;
+	data.setAttribute('numChildren', number);
+});
+arrLi.forEach( function(data) {
+	if (+data.getAttribute('numChildren') !== 0) {
+		var text = data.firstChild.data;
+		var number = +data.getAttribute('numChildren');
+		data.firstChild.data = text + ' [' + number + ']'; 
+	};
+});
+
+
+// Создать календарь в виде таблицы
+/*Напишите функцию, которая умеет генерировать календарь для заданной пары (месяц, год).
+Календарь должен быть таблицей, где каждый день – это TD. У таблицы должен быть заголовок с названиями дней недели, каждый день – TH.
+Синтаксис: createCalendar(id, year, month).
+Такой вызов должен генерировать текст для календаря месяца month в году year, а затем помещать его внутрь элемента с указанным id.*/
+function createCalendar(id, year, month) {
+	var calendar = document.createElement('div');
+	calendar.setAttribute('id', 'id');
+// create table with week days:
+	var tableMonth = document.createElement('table');
+	tableMonth.setAttribute('id', 'newTable');
+	var tHead = document.createElement('thead');
+	var tHeadTR = document.createElement('tr');
+	var tHeadTR1 = document.createElement('th');
+	tHeadTR1.setAttribute('scope', 'col');
+	tHeadTR1.innerHTML = 'Mon';
+	tHeadTR.appendChild(tHeadTR1);
+	var tHeadTR2 = document.createElement('th');
+	tHeadTR2.setAttribute('scope', 'col');
+	tHeadTR2.innerHTML = 'Tue';
+	tHeadTR.appendChild(tHeadTR2);
+	var tHeadTR3 = document.createElement('th');
+	tHeadTR3.setAttribute('scope', 'col');
+	tHeadTR3.innerHTML = 'Wed';
+	tHeadTR.appendChild(tHeadTR3);
+	var tHeadTR4 = document.createElement('th');
+	tHeadTR4.setAttribute('scope', 'col');
+	tHeadTR4.innerHTML = 'Thu';
+	tHeadTR.appendChild(tHeadTR4);
+	var tHeadTR5 = document.createElement('th');
+	tHeadTR5.setAttribute('scope', 'col');
+	tHeadTR5.innerHTML = 'Fri';
+	tHeadTR.appendChild(tHeadTR5);
+	var tHeadTR6 = document.createElement('th');
+	tHeadTR6.setAttribute('scope', 'col');
+	tHeadTR6.innerHTML = 'Sat';
+	tHeadTR.appendChild(tHeadTR6);
+	var tHeadTR7 = document.createElement('th');
+	tHeadTR7.setAttribute('scope', 'col');
+	tHeadTR7.innerHTML = 'Sun';
+	tHeadTR.appendChild(tHeadTR7);
+	tHead.appendChild(tHeadTR);
+	tableMonth.appendChild(tHead);
+// get all attributes for the calendar:
+	var date = new Date(year, month - 1);
+	var weekDay = date.getDay();
+	var nextMonth = new Date(year, month);
+	var daysInMonth = nextMonth.getDate(nextMonth.setDate(0));
+	var numberWeeks = Math.ceil((daysInMonth + weekDay - 1) / 7);
+// create and fill the calendar:
+	var tBody = document.createElement('tbody');
+	var counter = 1;
+	for (var i = 0; i < numberWeeks; i++) {
+		var tr = document.createElement('tr');
+		var end = counter + 7;
+		for (var j = counter; j < end; j++) {
+			if ((i == 0 && j < weekDay) || j > daysInMonth) {
+				var td = document.createElement('td');
+				tr.appendChild(td);
+			} else {
+				var td = document.createElement('td');
+				td.innerHTML = counter;
+				tr.appendChild(td);
+				counter += 1;
+			};
+		};
+		tBody.appendChild(tr);
+	};
+	tableMonth.appendChild(tBody);
+	calendar.appendChild(tableMonth);
+	document.body.appendChild(calendar);
+};
+createCalendar('calendar', 2016, 09);
+/*Для решения задачи сгенерируем таблицу в виде строки: "<table>...</table>", а затем присвоим в innerHTML.
+Алгоритм:
+* Создать объект даты d = new Date(year, month-1). Это первый день месяца month (с учетом того, что месяцы в JS начинаются от 0, а не от 1).
+* Ячейки первого ряда пустые от начала и до дня недели d.getDay(), с которого начинается месяц. Создадим их.
+* Увеличиваем день в d на единицу: d.setDate(d.getDate()+1), и добавляем в календарь очередную ячейку, пока не достигли следующего месяца.
+При этом последний день недели означает вставку перевода строки «</tr><tr>».
+* При необходимости, если календарь окончился не на воскресенье – добавить пустые TD в таблицу, чтобы было все ровно.*/
+
+
+// Часики с использованием "setInterval"
+/*Создайте цветные часики*/
+var timer = document.createElement('section');
+document.body.insertBefore(timer, document.body.firstElementChild);
+var block1 = document.createElement('div');
+block1.setAttribute('id', 'hour');
+var block2 = document.createElement('div');
+block2.setAttribute('id', 'minute');
+var block3 = document.createElement('div');
+block3.setAttribute('id', 'second');
+timer.appendChild(block1);
+timer.appendChild(block2);
+timer.appendChild(block3);
+function getCurrentTime() {
+	var date = new Date();
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var seconds = date.getSeconds();
+	if (hours < 10) {
+		hour.innerHTML = '0' + hours + ':';
+	} else {
+		hour.innerHTML = hours + ':';
+	};
+	if (minutes < 10) {
+		minute.innerHTML = '0' + minutes + ':';
+	} else {
+		minute.innerHTML = minutes + ':';
+	};
+	if (seconds < 10) {
+		second.innerHTML = '0' + seconds + ':';
+	} else {
+		second.innerHTML = seconds + ':';
+	};
+};
+var timerId = setInterval(getCurrentTime, 1000);
+clearInterval(timerId);
+
+
+// Скругленая кнопка со стилями из JavaScript
+/*Создайте кнопку в виде элемента <a> с заданным стилем, используя JavaScript.
+В примере ниже такая кнопка создана при помощи HTML/CSS. В вашем решении кнопка должна создаваться, 
+настраиваться и добавляться в документ при помощи только JavaScript, без тегов <style> и <a>.*/
+/*<style>
+  .button {
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    border: 2px groove green;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    width: 100px;
+    text-decoration: none;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+  }
+</style>
+<a class="button" href="/">Нажми меня</a>*/
+
+var buttonOnClock = document.createElement('a');
+buttonOnClock.setAttribute('class', 'button');
+buttonOnClock.setAttribute('href', '/');
+buttonOnClock.innerHTML = "Start Clock";
+var parentElement = document.body.getElementsByClassName('clockButtons')[0];
+parentElement.appendChild(buttonOnClock);
+buttonOnClock.style.cssText = "-moz-border-radius: 8px;\
+    -webkit-border-radius: 8px;\
+    border-radius: 8px;\
+    border: 2px groove green;\
+    display: block;\
+    height: 30px;\
+    line-height: 30px;\
+    width: 100px;\
+    text-decoration: none;\
+    text-align: center;\
+    color: red;\
+    font-weight: bold;";
+
+
+// Создать уведомление
+/*Напишите функцию showNotification(options), которая показывает уведомление, пропадающее через 1.5 сек.
+Описание функции:
+ * Показывает уведомление, пропадающее через 1.5 сек
+ * @param options.top {number} вертикальный отступ, в px
+ * @param options.right {number} правый отступ, в px
+ * @param options.cssText {string} строка стиля
+ * @param options.className {string} CSS-класс
+ * @param options.html {string} HTML-текст для показа*/
+
+function showNotification(options) {
+	var elem = document.createElement('section');
+	elem.setAttribute('class', options.className);
+	elem.innerHTML = options.html;
+	if (options.cssText) {
+		elem.style.cssText = options.cssText;
+	};
+	elem.style.display = 'block';
+	elem.style.cssFloat = 'right';
+	elem.style.marginTop = (options.top || 0) + 'px';
+	elem.style.marginRight = (options.right || 0) + 'px';
+	document.body.insertBefore(elem, document.body.firstChild);
+// hide the element:
+	setTimeout( function() {
+		document.body.removeChild(elem);
+	}, 1500);
+};
+// покажет элемент с текстом "Hello!" и классом welcome справа-сверху окна
+showNotification({
+  top: 10,
+  right: 10,
+  html: "Hello!",
+  className: "welcome"
+});
+
+
+// Найти размер прокрутки снизу
+/*Свойство elem.scrollTop содержит размер прокрученной области при отсчете сверху. А как подсчитать размер прокрутки снизу?
+Напишите соответствующее выражение для произвольного элемента elem.
+Проверьте: если прокрутки нет вообще или элемент полностью прокручен – оно должно давать ноль.*/
+var elem = document.querySelector('div[class="AgileManifesto"]');
+var scrollBottom = elem.scrollHeight - elem.scrollTop - elem.clientHeight;
+console.log(scrollBottom);
+
+
+// Узнать ширину полосы прокрутки
+/*Напишите код, который возвращает ширину стандартной полосы прокрутки.
+Именно самой полосы, где ползунок. Обычно она равна 16px, в редких и мобильных браузерах может колебаться от 14px до 18px, 
+а кое-где даже равна 0px.
+P.S. Ваш код должен работать на любом HTML-документе, независимо от его содержимого.*/
+var elem = document.querySelector('div[class="AgileManifesto"]');
+var scrollWidth = elem.offsetWidth - elem.clientWidth - 2 * elem.clientLeft;		// 17
+
+
+// Подменить div на другой с таким же размером
+var div = document.getElementById('moving-div');
+div.style.position = 'absolute';
+div.style.right = div.style.top = 0;
+var styles = getComputedStyle(div);
+var div2 = div.cloneNode(false);
+div2.style.position = '';
+div2.style.borderColor = 'silver';
+div2.style.backgroundColor = 'silver';
+div2.style.height = styles.height;
+document.body.insertBefore(div2, div.nextSibling);
+
+
+// Поместите мяч в центр поля
+/*Используйте JavaScript, чтобы поместить мяч в центр.
+Менять CSS нельзя, мяч должен переносить в центр ваш скрипт, через установку нужных стилей элемента.
+JavaScript-код должен работать при разных размерах мяча (10, 20, 30 пикселей) без изменений.
+JavaScript-код должен работать при различных размерах и местоположениях поля на странице без изменений. 
+Также он не должен зависеть от ширины рамки поля border.
+P.S. Да, центрирование можно сделать при помощи чистого CSS, но задача именно на JavaScript. 
+Далее будут другие темы и более сложные ситуации, когда JavaScript будет уже точно необходим, это – своего рода «разминка».*/
+		var ballWidth = ball.offsetWidth;
+		var ballHeight = ball.offsetHeight;
+		var fieldWidth = field.clientWidth;
+		var fieldHeight = field.clientHeight;
+		ball.style.left = fieldWidth / 2 - ballWidth / 2 + 'px';
+		ball.style.top = fieldHeight / 2 - ballHeight / 2 + 'px';
+		var ballStyles = getComputedStyle(ball);
+		console.log('ball size: ' + ballWidth + "x" + ballHeight);
+		console.log('field size: ' + fieldWidth + "x" + fieldHeight);
+		if (ballStyles.right === ballStyles.left) {
+			console.log("from the left and the right field sides: " + ballStyles.right);
+		} else {
+			console.log("from the left field side: " +  ballStyles.left);
+			console.log("from the right field side: " +  ballStyles.right);
+		};
+		if (ballStyles.top === ballStyles.bottom) {
+			console.log("from the top and the bottom field sides: " + ballStyles.top);
+		} else {
+			console.log("from the top field side: " +  ballStyles.top);
+			console.log("from the bottom field side: " +  ballStyles.bottom);
+		};
+
+// Расширить элемент
+/*В <body> есть элемент <div> с заданной шириной width.
+Задача – написать код, который «распахнет» <div> по ширине на всю страницу.
+Исходный документ (<div> содержит текст и прокрутку).
+P.S. Пользоваться следует исключительно средствами JS, CSS в этой задаче менять нельзя. 
+Также ваш код должен быть универсален и не ломаться, если цифры в CSS станут другими.
+P.P.S. При расширении элемент <div> не должен вылезти за границу <body>.*/
+var bodyWidth = parseInt(getComputedStyle(bodyEl).width);
+var elemStyles = getComputedStyle(elem);
+var elemBorder = parseInt(elemStyles.borderRightWidth) + parseInt(elemStyles.borderLeftWidth);
+var elemMargin = parseInt(elemStyles.marginLeft) + parseInt(elemStyles.marginRight);
+var elemPadding = parseInt(elemStyles.paddingLeft) + parseInt(elemStyles.paddingRight);
+var newWidth = bodyWidth - (elemBorder + elemMargin + elemPadding);
+elem.style.width = newWidth + 'px';
