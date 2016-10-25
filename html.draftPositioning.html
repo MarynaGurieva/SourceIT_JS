@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>test</title>
+	<link rel="stylesheet" href="draftPositioningStyles.css">
+	<script>
+    	document.onclick = function(e) { // выводит текущие координаты при клике
+      		document.getElementById('coords').innerHTML = e.clientX + ' : ' + e.clientY;
+    	};
+  	</script>
+</head>
+<body>
+	<div id="coords">(координаты появятся тут)</div>
+	<div id="field">
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+	</div>
+	<div class="triangle-right" style="left:-20px;top:-176px">1</div>
+	<div class="triangle-right" style="left:-10px;top:-178px">3</div>
+	<div class="triangle-right" style="left:190px;top:-40px">4</div>
+	<div class="triangle-right" style="left:200px;top:-42px">2</div>
+	<script type="text/javascript">
+		var field = document.getElementById('field');
+		var fieldCoords = field.getBoundingClientRect();
+	// the 1st counter: the 1st point: top=46, left=28;
+		console.log('the 1st point: top=' + fieldCoords.top + ', left=' + fieldCoords.left + ';');
+	// the 3rd counter: the 3nd point: top=56, left=38;
+		var topX = fieldCoords.top + field.clientTop;
+		var left = fieldCoords.left + field.clientLeft;
+		console.log('the 3nd point: top=' + topX + ', left=' + left + ';');
+	// the 4th counter: the 4nd point: top=206, left=238;
+		var topX = topX + field.clientHeight;
+		var left = left + field.clientWidth;
+		console.log('the 4nd point: top=' + topX + ', left=' + left + ';');
+	// the 2nd counter: the 2nd point: top=216, left=248
+		console.log('the 2nd point: top=' + fieldCoords.bottom + ', left=' + fieldCoords.right + ';');
+	</script>
+	<script type="text/javascript">
+		var quo = document.createElement('blockquote');
+		quo.setAttribute('id', 'barto');
+		quo.innerHTML = "МИШКА<br>Уронили мишку на пол,<br>Оторвали мишке лапу.<br>Все равно его не брошу —<br>Потому что он хороший.<br><i>Агния Барто «Стихи детям»</i>";
+		var nextSibling = document.body.getElementsByTagName('script')[0];
+		document.body.insertBefore(quo, nextSibling);
+		var elem = document.createElement('div');
+		elem.setAttribute('id', 'note');
+		elem.style.position = 'absolute';
+		elem.innerHTML = "note";
+		document.body.appendChild(elem);
+		function positionAt(anchor, position, elem) {
+			var anchCoords = anchor.getBoundingClientRect();
+			switch(position) {
+				case 'top-out':
+					elem.style.top = anchCoords.top - elem.offsetHeight + 'px';
+					elem.style.left = anchCoords.left + 'px';
+					break;
+				case 'top-in':
+					elem.style.top = anchCoords.top +'px';
+					elem.style.left = anchCoords.left + 'px';
+					break;
+				case "right-out":
+					elem.style.top = anchCoords.top + 'px';
+					elem.style.left = anchCoords.left + anchor.offsetWidth + 'px';
+					break;
+				case "right-in":
+					elem.style.top = anchCoords.top + 'px';
+					elem.style.left = anchCoords.left + anchor.offsetWidth - elem.offsetWidth + 'px';
+					break;
+				case "bottom-out":
+					elem.style.top = anchCoords.top + anchor.offsetHeight + 'px';
+					elem.style.left = anchCoords.left + 'px';
+					break;
+				case "bottom-in":
+					elem.style.top = anchCoords.top + anchor.offsetHeight - elem.offsetHeight + 'px';
+					elem.style.left = anchCoords.left + 'px';
+					break;
+				default:
+					console.log("Please, check the position parameter");
+					break;
+			};
+		};
+		//positionAt(barto, 'right-out', elem);
+		//positionAt(barto, 'top-out', elem);
+		//positionAt(barto, 'bottom-in', elem);
+		function showNote(anchor, position, html) {
+			positionAt(anchor, position, note);
+			elem.innerHTML = html;
+		};
+	showNote(barto, 'right', 'the new user note');
+	</script>
+	<body style="height: 2000px">
+</body>
+</html>

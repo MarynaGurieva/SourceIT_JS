@@ -1519,3 +1519,97 @@ var elemMargin = parseInt(elemStyles.marginLeft) + parseInt(elemStyles.marginRig
 var elemPadding = parseInt(elemStyles.paddingLeft) + parseInt(elemStyles.paddingRight);
 var newWidth = bodyWidth - (elemBorder + elemMargin + elemPadding);
 elem.style.width = newWidth + 'px';
+
+
+//Найдите координаты точки в документе
+/*При помощи JavaScript найдите координаты указанных стрелками углов относительно окна браузера.
+Для тестирования в документ добавлено удобство: клик в любом месте отображает координаты мыши относительно окна.
+Ваш код должен при помощи DOM получить четыре пары координат:
+Левый-верхний угол снаружи, это просто.
+Правый-нижний угол снаружи, это тоже просто.
+Левый-верхний угол внутри, это чуть сложнее.
+Правый-нижний угол внутри, это ещё сложнее, но можно сделать даже несколькими способами.
+Они должны совпадать с координатами, которые вы получите кликом по полю.
+P.S. Код не должен быть как-то привязан к конкретным размерам элемента, стилям, наличию или отсутствию рамки.*/
+	var field = document.getElementById('field');
+	var fieldCoords = field.getBoundingClientRect();
+// the 1st counter:
+	console.log('the 1st point: top=' + fieldCoords.top + ', left=' + fieldCoords.left + ';');
+// the 3rd counter:
+	var topX = fieldCoords.top + field.clientTop;
+	var left = fieldCoords.left + field.clientLeft;
+	console.log('the 3nd point: top=' + topX + ', left=' + left + ';');
+// the 4th counter:
+	var topX = topX + field.clientHeight;
+	var left = left + field.clientWidth;
+	console.log('the 4nd point: top=' + topX + ', left=' + left + ';');
+// the 2nd counter:
+	var topX = fieldCoords.top + field.offsetHeight;
+	var left = fieldCoords.left + field.offsetWidth;
+	console.log('the 2nd point: top=' + topX + ', left=' + left);
+
+
+// Разместить заметку рядом с элементом
+/*Создайте функцию positionAt(anchor, position, elem), которая позиционирует элемент elem, в зависимости от position, 
+сверху ("top"), справа ("right") или снизу ("bottom") от элемента anchor.
+Используйте её, чтобы сделать функцию showNote(anchor, position, html), 
+которая показывает элемент с классом note и текстом html на позиции position рядом с элементом anchor.*/
+		var quo = document.createElement('blockquote');
+		quo.setAttribute('id', 'barto');
+		quo.innerHTML = "МИШКА<br>Уронили мишку на пол,<br>Оторвали мишке лапу.<br>Все равно его не брошу —<br>Потому что он хороший.<br><i>Агния Барто «Стихи детям»</i>";
+		var nextSibling = document.body.getElementsByTagName('script')[0];
+		document.body.insertBefore(quo, nextSibling);
+		var elem = document.createElement('div');
+		elem.setAttribute('id', 'note');
+		elem.style.position = 'fixed';
+		elem.innerHTML = "note";
+		document.body.appendChild(elem);
+		function positionAt(anchor, position, elem) {
+			var anchCoords = anchor.getBoundingClientRect();
+			if (position == 'top') {
+				elem.style.top = anchCoords.top - elem.offsetHeight + 'px';
+				elem.style.left = anchCoords.left + 'px';
+			} else if (position == "right") {
+				elem.style.top = anchCoords.top + 'px';
+				elem.style.left = anchCoords.left + anchor.offsetWidth + 'px';
+			} else {
+				elem.style.top = anchCoords.top + anchor.offsetHeight + 'px';
+				elem.style.left = anchCoords.left + 'px';
+			};
+		};
+positionAt(barto, 'right', elem);
+positionAt(barto, 'top', elem);
+positionAt(barto, 'bottom', elem);
+	function showNote(anchor, position, html) {
+		positionAt(anchor, position, note);
+		elem.innerHTML = html;
+	};
+showNote(barto, 'right', 'the new user note');
+
+
+// Область видимости для документа
+/*Напишите функцию getDocumentScroll(), которая возвращает объект с информацией о текущей прокрутке и области видимости.
+Свойства объекта-результата:
+top – координата верхней границы видимой части (относительно документа).
+bottom – координата нижней границы видимой части (относительно документа).
+height – полная высота документа, включая прокрутку.
+В этой задаче учитываем только вертикальную прокрутку: горизонтальная делается аналогично, а нужна сильно реже.*/
+function getDocumentScroll() {
+	var obj = {};
+	var scrLengthView = window.pageYOffset || document.documentElement.scrollTop;		// viewed length of scroll;
+	obj.top = scrLengthView;
+	var docHeight = document.body.getBoundingClientRect().height;								// height of the document visual part
+	obj.bottom = docHeight + scrLengthView;
+	var scrLengthAll = Math.max(
+	    document.body.scrollHeight, document.documentElement.scrollHeight,
+	    document.body.offsetHeight, document.documentElement.offsetHeight,
+	    document.body.clientHeight, document.documentElement.clientHeight
+	);
+	document.body.scrollHeight;							// full length of scroll;										
+	obj.height = scrLengthAll;
+	return obj;
+};
+getDocumentScroll();
+
+
+// 
