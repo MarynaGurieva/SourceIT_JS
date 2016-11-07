@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>test</title>
+	<link rel="stylesheet" href="draftEventsStyles.css">
+</head>
+<body>
+	<div id="buttonsNotices">
+		<p>Focus on the button to see the attribute content:</p>
+		<form>
+			<button data-tooltip="Yellow and orange trees around, sometimes rain">Autumn</button>
+  			<button data-tooltip="Snow and frost<br>Christmas & New Year's Holidays">Winter</button>
+  		</form>
+	</div>
+	<fieldset id="content">
+		<legend>#contents</legend>
+		<p>Read <a href="http://wikipedia.org">Wikipedia</a> and see information on link <a href="http://w3.org"><i>W3.org</i></a> to know more about the latest standards</p>
+    </fieldset>
+    <div id="picture">
+		<p><img id="largeImg" src="https://js.cx/gallery/img1-lg.jpg" alt="Large image"></p>
+		<div id="thumbs">
+			<a href="https://js.cx/gallery/img2-lg.jpg" title="Image 2"><img src="https://js.cx/gallery/img2-thumb.jpg"></a>
+			<a href="https://js.cx/gallery/img3-lg.jpg" title="Image 3"><img src="https://js.cx/gallery/img3-thumb.jpg"></a>
+			<a href="https://js.cx/gallery/img4-lg.jpg" title="Image 4"><img src="https://js.cx/gallery/img4-thumb.jpg"></a>
+			<a href="https://js.cx/gallery/img5-lg.jpg" title="Image 5"><img src="https://js.cx/gallery/img5-thumb.jpg"></a>
+			<a href="https://js.cx/gallery/img6-lg.jpg" title="Image 6"><img src="https://js.cx/gallery/img6-thumb.jpg"></a>
+		</div>
+    </div>
+	<script type="text/javascript">
+	// notices ob buttons with attribute content:
+		document.onmouseover = function(event) {
+			var target = event.target;
+			if (!target.getAttribute('data-tooltip')) return;
+			var notice = document.createElement('div');
+			notice.setAttribute('class', 'noticeButton');
+			notice.innerHTML =  target.getAttribute('data-tooltip');
+			buttonsNotices.querySelector('form').appendChild(notice);
+			// positioning the notice block:
+			notice.style.position = 'fixed';
+			var buttonFullHeight = parseInt(getComputedStyle(notice).marginTop) + parseInt(getComputedStyle(notice).marginBottom) + notice.offsetHeight;
+			var topButton = target.getBoundingClientRect().top;
+			var leftButton = target.getBoundingClientRect().left;
+			if (topButton > buttonFullHeight) {
+				notice.style.top = topButton - buttonFullHeight + 'px';
+			} else {
+				notice.style.top = topButton + target.offsetHeight + 'px';
+			};
+			notice.style.left = leftButton + 'px';
+		};
+		document.onmouseout = function(event) {
+			var target = event.target;
+			if (!target.getAttribute('data-tooltip')) return;
+			var notice = buttonsNotices.querySelector('div[class="noticeButton"]');
+			target.parentElement.removeChild(notice);
+		};
+	// Catch the link
+		document.addEventListener('click', catchLink);
+		function catchLink(event) {
+			var target = event.target;
+			if (!target.closest('#content')) return;
+			console.log('OK');
+			if (!target.closest('a')) return;
+			var answer = confirm("Would you really want to leave this page and go over the link?");
+			if (answer) {
+				var link = target.closest('a').getAttribute('href');
+				document.location.href = link;
+			} else {
+				event.preventDefault();
+			};
+		};
+	// Look over images
+		thumbs.addEventListener('click', enlargeImg);
+		function enlargeImg(event) {
+			var target = event.target;
+			if (!target.closest('#picture')) return;
+			if (!target.closest('a')) return;
+			var href = target.closest('a').getAttribute('href');
+			largeImg.src = href;
+			var title = target.closest('a').getAttribute('title');
+			largeImg.alt = title;
+			event.preventDefault();		// cancel of going over the link
+		};
+	</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+.menu ul {
+  margin: 0;
+  list-style: none;
+  padding-left: 20px;
+  display: none;
+}
+.menu .title::before {
+  content: '▼ ';
+  font-size: 80%;
+  color: green;
+}
+.menu.open .title::before {
+  content: '▼ ';
+}
+.menu.open ul {
+  display: block;
+}
+
+.message {
+	position: relative;
+	padding: 10px; 
+	background-color: lightsteelblue;
+	border-top: 4px solid darkblue;
+	width: 400px;
+}
+.message:last-child {
+	margin-bottom: 5px;
+	border-bottom: 4px solid darkblue;
+}
+.message:first-child {
+	margin-top: 5px;
+}
+.message input {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	background-color: lightsteelblue;
+	padding: 2px;
+	border: 0;
+	font-weight: bold;
+	color: darkblue;
+}
+
+.smiles li {
+	display: inline-block;
+	height: 100px;
+}
+.smiles img {
+	height: 100px;
+	display: block;
+}
+.smiles {
+	position: absolute;
+	font-size: 0;
+	margin: 10px 0 10px 0;
+	padding: 5px 50px 5px 50px;
+	width: 300px;		/* three pictures */
+	height: 100px;		/* one pictures */
+	overflow: hidden;
+	border: 1px solid darkblue;
+	border-radius: 10px;
+	background-color: lavender;
+}
+#toRight, #toLeft {
+	position: absolute;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	padding: 1px;
+	width: 30px;
+	border: 1px solid lightslategray;
+	border-radius: 10px;
+	background-color: powderblue;
+}
+#toRight {
+	left: 350px;
+	top: 44px;
+}
+#toLeft {
+	left: 20px;
+	top: 44px;
+}
+
+#sortable td, th {
+	padding: 2px 10px;
+	border: 1px solid black;
+}
+#sortable td:hover {
+	color: blue;
+}
+#sortable th:hover {
+	background-color: yellow;
+}
+
+#buttonsNotices button {
+	width: 100px;
+	margin-bottom: 10px;
+}
+#buttonsNotices p {
+	margin: 10px 0 5px 0;
+}
+
+.noticeButton {
+	padding: 5px;
+	margin: 5px 0 5px 0;
+	border: 1px solid gray;
+	border-radius: 5px;
+	box-shadow: 2px 2px darkblue;
+	position: absolute;
+	background-color: white;
+}
+
+#content {
+    padding: 5px;
+    border: 1px green solid;
+}
+
+#picture {
+  margin: 0;
+  padding: 0;
+  font: 75%/120% Arial, Helvetica, sans-serif;
+}
+
+#picture h2 {
+  font: bold 190%/100% Arial, Helvetica, sans-serif;
+  margin: 0 0 .2em;
+}
+
+#picture h2 em {
+  font: normal 80%/100% Arial, Helvetica, sans-serif;
+  color: #999999;
+}
+
+#largeImg {
+  border: solid 1px #ccc;
+  width: 550px;
+  height: 400px;
+  padding: 5px;
+}
+
+#thumbs a {
+  border: solid 1px #ccc;
+  width: 100px;
+  height: 100px;
+  padding: 3px;
+  margin: 2px;
+  float: left;
+}
+
+#thumbs a:hover {
+  border-color: #FF9900;
+}

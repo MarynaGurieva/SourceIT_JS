@@ -1612,4 +1612,530 @@ function getDocumentScroll() {
 getDocumentScroll();
 
 
-// 
+// Спрятать при клике
+// Используя JavaScript, сделайте так, чтобы при клике на кнопку исчезал элемент с id="text".
+/*<input type="button" id="hider" value="Нажмите, чтобы спрятать текст" />
+<div id="text">Текст</div>*/
+hider.addEventListener('click', hide);
+function hide() {
+	text.setAttribute('hidden', 'true');
+};
+
+
+// Спрятаться
+/*Создайте кнопку, при клике на которую, она будет скрывать сама себя.*/
+		hiddenButton.addEventListener('click', hideButton);
+		function hideButton() {
+			this.style.display = 'none';
+			// hiddenButton.setAttribute('hidden', 'true');
+
+
+// Раскрывающееся меню
+/*Создайте меню, которое раскрывается/сворачивается при клике:*/
+		menuHiddenList.addEventListener('click', showList);
+		function showList() {
+			menuHiddenList.removeAttribute('class');
+			menuHiddenList.setAttribute('class', 'menu-open');
+		};
+
+
+// Спрятать сообщение
+/*Есть список сообщений. Добавьте каждому сообщению по кнопке для его скрытия.*/
+		document.querySelectorAll('input[class="messageHide"]').forEach( function (entry) {
+			entry.addEventListener('click', hideMessage);
+		});
+		function hideMessage() {
+			this.parentElement.setAttribute('hidden', 'true');
+		};
+
+
+//Карусель
+/*Напишите «Карусель» – ленту изображений, которую можно листать влево-вправо нажатием на стрелочки.
+В дальнейшем к ней можно легко добавить анимацию, динамическую подгрузку и другие возможности.
+P.S. В этой задаче разработка HTML/CSS-структуры составляет 90% решения.*/
+		toRight.addEventListener('click', moveToRight);
+		toLeft.addEventListener('click', moveToLeft);
+		function moveToRight() {
+			var parent = document.querySelectorAll('ul[class="smiles"]');
+			var liList = parent[0].querySelectorAll('li');		// all 'li'=img
+			var movingImg = parent[0].removeChild(liList[0]);
+			parent[0].insertBefore(movingImg, toRight);
+		};
+		function moveToLeft() {
+			var parent = document.querySelectorAll('ul[class="smiles"]');
+			var liList = parent[0].querySelectorAll('li');		// all 'li'=img
+			var movingImg = parent[0].removeChild(liList[liList.length - 1]);
+			parent[0].insertBefore(movingImg, parent[0].firstChild);
+		};
+
+
+// Передвигать мяч по полю
+/*Сделайте так, что при клике по полю мяч перемещался на место клика.
+Требования:
+Мяч после перелёта должен становиться центром ровно под курсор мыши, если это возможно без вылета за край поля.
+CSS-анимация не обязательна, но желательна.
+Мяч должен останавливаться у границ поля, ни в коем случае не вылетать за них.
+При прокрутке страницы с полем ничего не должно ломаться.
+Замечания:
+Код не должен зависеть от конкретных размеров мяча и поля.
+Вам пригодятся свойства event.clientX/event.clientY*/
+		field.addEventListener('click', moveBall);
+		function moveBall(event) {
+			event = event || window.event;
+		// get ball sizes:
+			var ballHeight = ball.offsetHeight;
+			var ballWidth = ball.offsetWidth;
+		// get internal field sides coordinates. The ball is always stayed inside them.
+			var fTop = field.getBoundingClientRect().top + field.clientTop;
+			var fBottom = fTop + field.clientHeight;
+			var fLeft = field.getBoundingClientRect().left + field.clientLeft;
+			var fRignt = fLeft + field.clientWidth;
+			console.log("fTop:" + fTop + "; fBottom:" +fBottom + "; fLeft:" + fLeft + "; fRignt" + fRignt);
+		// get mouse click coordinates:
+			var coordX = event.clientX;
+			var coordY = event.clientY;
+			console.log('coordY:' + coordY + '; coordX:' + coordX);
+		// set coordinates for ball to move:
+			var newY, newX 
+			if (coordY < fTop + ballHeight / 2) {
+				newY = 0;
+			} else if (coordY > fBottom - ballHeight / 2) {
+				newY = fBottom - ballHeight - fTop;
+			} else {
+				newY = coordY - ballHeight / 2 - fTop;
+			};
+			if (coordX < fLeft + ballWidth / 2) {
+				newX = 0; 
+			} else if (coordX > fRignt - ballWidth / 2) {
+				newX = fRignt - ballWidth - fLeft;
+			} else {
+				newX = coordX - ballWidth / 2 - fLeft;
+			};
+			console.log("newY:" + newY + "; newX:" + newX);
+		// move the ball to the new coordinates:
+			ball.style.top = newY + 'px';
+			ball.style.left = newX + 'px';
+		};
+
+
+// Скрытие сообщения с помощью делегирования
+/*Дан список сообщений. Добавьте каждому сообщению кнопку для его удаления.
+Используйте делегирование событий. Один обработчик для всего.*/
+		messageBlock.onclick = function(event) {
+			var target = event.target;
+			if (!target.closest('input')) return;
+			while (target != this) {
+				if (target.className == 'message') {
+					hideMessage(target);
+					return;
+				};
+				target = target.parentNode;
+			};
+		};
+		function hideMessage(target) {
+			target.setAttribute('hidden', 'true');
+		};
+
+
+// Раскрывающееся дерево
+/*Создайте дерево, которое по клику на заголовок скрывает-показывает детей.
+Требования:
+Использовать делегирование.
+Клик вне текста заголовка (на пустом месте) ничего делать не должен.
+При наведении на заголовок – он становится жирным, реализовать через CSS.
+P.S. При необходимости HTML/CSS дерева можно изменить.*/
+		var arrLi = listAnimals.querySelectorAll('li');
+		for (var i = 0; i < arrLi.length; i++) {
+			var li = arrLi[i];
+			var span = document.createElement('span');
+			li.insertBefore(span, li.firstChild);
+			span.appendChild(span.nextSibling);
+		};
+		listAnimals.addEventListener('mouseover', doBold);
+		function doBold(event) {
+			var target = event.target;
+			if (!target.closest('span')) return;
+			target.style.fontWeight = 'bold';
+			target.style.cursor = 'pointer';
+			for (var i = 0; i < target.children.length; i++) {
+				target.children[i].style.fontWeight = 'normal';
+			};
+		};
+		listAnimals.addEventListener('mouseout', doNotBold);
+		function doNotBold(event) {
+			var target = event.target;
+			if (!target.closest('span')) return;
+			target.style.fontWeight = '';
+			target.style.cursor = '';
+		};
+		listAnimals.addEventListener('click', hideShowChildren);
+		function hideShowChildren(event) {
+			var target = event.target;
+			if (target.tagName == 'SPAN' && target.nextElementSibling !== null) {
+				if (!target.nextElementSibling.hasAttribute('hidden')) {
+					target.nextElementSibling.setAttribute('hidden', 'true');
+				} else {
+					target.nextElementSibling.removeAttribute('hidden');
+				};
+			};
+		};
+
+
+// Сортировка таблицы
+/*Сделать сортировку таблицы при клике на заголовок.
+Требования:
+Использовать делегирование.
+Код не должен меняться при увеличении количества столбцов или строк.
+P.S. Обратите внимание, тип столбца задан атрибутом у заголовка. 
+Это необходимо, ведь числа сортируются иначе чем строки. Соответственно, код это может использовать.*/
+		// compare function to sort numbers in an arrow:
+		function compareAge(elementA, elementB) {
+			return elementA.age - elementB.age;
+		};
+		function compareName(elementA, elementB) {
+			return elementA.name > elementB.name ? 1 : -1;
+		};
+		// set attributes for th:
+		sortable.querySelectorAll('th')[0].setAttribute('data-sort', 'age');
+		sortable.querySelectorAll('th')[1].setAttribute('data-sort', 'name');
+		// oncick:
+		sortable.onclick = function(event) {
+			var target = event.target;
+			if (target.tagName != 'TH') return;
+		// create an array with objects inside from the table data:
+			var arr = [];
+			for (var i = 0; i < sortable.children[2].children.length; i++) {
+				var objRow = {};
+				objRow.age = sortable.children[2].children[i].children[0].innerText;
+				objRow.name = sortable.children[2].children[i].children[1].innerText;
+				objRow.content = sortable.children[2].children[i].cloneNode(true);
+				arr.push(objRow);
+			};
+		//sort an array:
+			var data = target.getAttribute('data-sort');
+			if (data == 'age') {
+				arr.sort(compareAge);
+			} else if (data = 'name') {
+				arr.sort(compareName);
+			} else {
+				console.log('Please, check the attribute data of each table th');
+			};
+		// change tbody for new sortable one:
+			var fragment = document.createDocumentFragment();
+			var tbody = sortable.children[2];
+			var tbodySort = tbody.cloneNode(false);
+			for (var z = 0; z < sortable.children[2].children.length; z++) {
+				tbodySort.appendChild(arr[z].content);
+			};
+			fragment.appendChild(tbodySort);
+			sortable.removeChild(sortable.children[2]);
+			sortable.appendChild(fragment);
+		};	
+
+
+//Поведение "подсказка"
+/*При наведении мыши на элемент, на нём возникает событие mouseover, при удалении мыши с элемента – событие mouseout.
+Зная это, напишите JS-код, который будет делать так, что при наведении на элемент, 
+если у него есть атрибут data-tooltip – над ним будет показываться подсказка с содержимым этого атрибута.
+В этой задаче можно полагать, что в элементе с атрибутом data-tooltip – только текст, то есть нет подэлементов.
+Детали оформления:
+Подсказка должна появляться при наведении на элемент, по центру и на небольшом расстоянии сверху. При уходе курсора с элемента – исчезать.
+Текст подсказки брать из значения атрибута data-tooltip. Это может быть произвольный HTML.
+Оформление подсказки должно задаваться CSS.
+Подсказка не должна вылезать за границы экрана, в том числе если страница частично прокручена. 
+Если нельзя показать сверху – показывать снизу элемента.
+Важно: нужно использовать приём разработки «поведение», то есть поставить обработчик (точнее два) на document, а не на каждый элемент.
+Плюс этого подхода – динамически добавленные в DOM позже элементы автоматически получат этот функционал.*/
+	// notices ob buttons with attribute content:
+		document.onmouseover = function(event) {
+			var target = event.target;
+			if (!target.getAttribute('data-tooltip')) return;
+			var notice = document.createElement('div');
+			notice.setAttribute('class', 'noticeButton');
+			notice.innerHTML =  target.getAttribute('data-tooltip');
+			buttonsNotices.querySelector('form').appendChild(notice);
+			// positioning the notice block:
+			notice.style.position = 'fixed';
+			var buttonFullHeight = parseInt(getComputedStyle(notice).marginTop) + parseInt(getComputedStyle(notice).marginBottom) + notice.offsetHeight;
+			var topButton = target.getBoundingClientRect().top;
+			var leftButton = target.getBoundingClientRect().left;
+			if (topButton > buttonFullHeight) {
+				notice.style.top = topButton - buttonFullHeight + 'px';
+			} else {
+				notice.style.top = topButton + target.offsetHeight + 'px';
+			};
+			notice.style.left = leftButton + 'px';
+		};
+		document.onmouseout = function(event) {
+			var target = event.target;
+			if (!target.getAttribute('data-tooltip')) return;
+			var notice = buttonsNotices.querySelector('div[class="noticeButton"]');
+			target.parentElement.removeChild(notice);
+		};
+
+
+// Поймайте переход по ссылке
+/*Сделайте так, чтобы при клике на ссылки внутри элемента #contents пользователю выводился вопрос о том, 
+действительно ли он хочет покинуть страницу и если он не хочет, то прерывать переход по ссылке.
+Детали:
+Содержимое #contents может быть загружено динамически и присвоено при помощи innerHTML.
+Так что найти все ссылки и поставить на них обработчики нельзя. Используйте делегирование.
+Содержимое может содержать вложенные теги, в том числе внутри ссылок, например, <a href=".."><i>...</i></a>.*/
+		document.onclick = function(event) {
+			var target = event.target;
+			if (!target.closest('fieldset')) return;
+			if (!target.closest('A')) return;
+			var answer = confirm("Would you really want to leave this page and go over the link?");
+			if (answer) {
+				var link = target.closest('A').getAttribute('href');
+				console.log(link);
+				document.location.href = link;
+			} else {
+				return false;
+			};
+		};
+
+
+//Галерея изображений
+/*Создайте галерею изображений, в которой основное изображение изменяется при клике на уменьшенный вариант.
+Для обработки событий используйте делегирование, т.е. не более одного обработчика.
+P.S. Обратите внимание – клик может быть как на маленьком изображении IMG, так и на A вне него.
+При этом event.target будет, соответственно, либо IMG, либо A.
+Дополнительно:
+Если получится – сделайте предзагрузку больших изображений, чтобы при клике они появлялись сразу.
+Всё ли в порядке с семантической вёрсткой в HTML исходного документа? Если нет – поправьте, чтобы было, как нужно.*/
+		thumbs.addEventListener('click', enlargeImg);
+		function enlargeImg(event) {
+			var target = event.target;
+			if (!target.closest('#picture')) return;
+			if (!target.closest('a')) return;
+			var href = target.closest('a').getAttribute('href');
+			largeImg.src = href;
+			var title = target.closest('a').getAttribute('title');
+			largeImg.alt = title;
+			event.preventDefault();		// cancel of going over the link
+		};
+
+
+// Перепишите суммирование аргументов
+/*Есть функция sum, которая суммирует все элементы массива:*/
+function sum(arr) {
+  return arr.reduce(function(a, b) {
+    return a + b;
+  });
+};
+alert( sum([1, 2, 3]) ); // 6 (=1+2+3)
+/*Создайте аналогичную функцию sumArgs(), которая будет суммировать все свои аргументы.
+Для решения примените метод reduce к arguments, используя call, apply или одалживание метода.*/
+function sumArgs() {
+	var arg = [].slice.call(arguments);
+	return arg.reduce(function(a, b) {
+		return a + b;
+	});
+};
+sumArgs(1, 2, 3, 10); // 16, аргументы переданы через запятую, без массива
+
+
+// Примените функцию к аргументам
+/*Напишите функцию applyAll(func, arg1, arg2...), которая получает функцию func и произвольное количество аргументов.
+Она должна вызвать func(arg1, arg2...), то есть передать в func все аргументы, начиная со второго, и возвратить результат.*/
+function applyAll(func) {
+	return func.apply(this, [].slice.call(arguments, 1));
+};
+// Применить Math.max к аргументам 2, -2, 3
+applyAll(Math.max, 2, -2, 3); // 3
+// Применить Math.min к аргументам 2, -2, 3
+applyAll(Math.min, 2, -2, 3); // -2
+function sum() { // суммирует аргументы: sum(1,2,3) = 6
+  return [].reduce.call(arguments, function(a, b) {
+    return a + b;
+  });
+};
+function mul() { // перемножает аргументы: mul(2,3,4) = 24
+  return [].reduce.call(arguments, function(a, b) {
+    return a * b;
+  });
+};
+applyAll(sum, 1, 2, 3); // -> sum(1, 2, 3) = 6
+applyAll(mul, 2, 3, 4); // -> mul(2, 3, 4) = 24
+
+//Перепишите цикл через map
+/*Код ниже получает из массива строк новый массив, содержащий их длины.
+Перепишите выделенный участок: уберите цикл, используйте вместо него метод map.*/
+var arr = ["Есть", "жизнь", "на", "Марсе"];
+var arrLength = [];
+for (var i = 0; i < arr.length; i++) {
+  arrLength[i] = arr[i].length;
+};
+arrLength;		//[4, 5, 2, 5]
+var arr = ["Есть", "жизнь", "на", "Марсе"];
+var arrLength = arr.map( function(data) {
+	return data.length;
+});
+arrLength;		//[4, 5, 2, 5]
+
+
+//Массив частичных сумм
+/*На входе массив чисел, например: arr = [1,2,3,4,5].
+Напишите функцию getSums(arr), которая возвращает массив его частичных сумм.
+Иначе говоря, вызов getSums(arr) должен возвращать новый массив из такого же числа элементов,
+в котором на каждой позиции должна быть сумма элементов arr до этой позиции включительно.
+Функция не должна модифицировать входной массив.
+В решении используйте метод arr.reduce.*/
+function getSums(arr) {
+	var resultArr = [];
+	var result = arr.reduce( function(sum, current) {
+		resultArr.push(sum);
+		return sum + current;
+	});
+	resultArr.push(result);
+	return resultArr;
+};
+function getSums(arr) {
+	var resultArr = [];
+	for (var i = 1; i <= arr.length; i++) {
+		var newArr = arr.slice(0, i);
+		var result = newArr.reduce( function(sum, current) {
+			return sum + current;
+		});
+		resultArr.push(result);
+	};	
+	return resultArr;
+};
+arr = [ 1, 2, 3, 4, 5 ];		// [1, 3, 6, 10, 15]
+arr = [-2,-1,0,1];				// [-2, -3, -3, -2]
+getSums( arr );
+
+
+//Использование функции вопросов
+/*Вызов user.checkPassword() в коде ниже должен, при помощи ask, 
+спрашивать пароль и вызывать loginOk/loginFail в зависимости от правильности ответа.*/
+"use strict";
+function ask(question, answer, ok, fail) {
+  var result = prompt(question, '');
+  if (result.toLowerCase() == answer.toLowerCase()) ok();
+  else fail();
+};
+var user = {
+  login: 'Василий',
+  password: '12345',
+  loginOk: function() {
+    alert( this.login + ' вошёл в сайт' );
+  },
+  loginFail: function() {
+    alert( this.login + ': ошибка входа' );
+  },
+  checkPassword: function() {
+    ask("Ваш пароль?", this.password, this.loginOk.bind(this), this.loginFail.bind(this));
+  }
+};
+user.checkPassword();
+
+
+// Использование функции вопросов с каррингом
+/*Теперь заменим две функции user.loginOk() и user.loginFail() на единый метод: user.loginDone(true/false),
+который нужно вызвать с true при верном ответе и fail – при неверном.*/
+"use strict";
+function ask(question, answer, ok, fail) {
+  var result = prompt(question, '');
+  if (result.toLowerCase() == answer.toLowerCase()) ok();
+  else fail();
+}
+var user = {
+  login: 'Василий',
+  password: '12345',
+  // метод для вызова из ask
+  loginDone: function(result) {
+    alert( this.login + (result ? ' вошёл в сайт' : ' ошибка входа') );
+  },
+  checkPassword: function() {
+  	var self = this;
+    ask("Ваш пароль?", this.password,
+      function() {
+        self.loginDone(true);
+      },
+      function() {
+        self.loginDone(false);
+      }
+    );
+  }
+};
+var vasya = user;
+user = null;
+vasya.checkPassword();
+
+
+// Логирующий декоратор (1 аргумент)
+/*Создайте декоратор makeLogging(f, log), который берет функцию f и массив log.
+Он должен возвращать обёртку вокруг f, которая при каждом вызове записывает («логирует») аргументы в log,
+а затем передает вызов в f.
+В этой задаче можно считать, что у функции f ровно один аргумент.*/
+function work(a) {
+  return console.log(a * 2);
+}
+function makeLogging(f, log) { 
+	return function() {
+		log.push(arguments[0]);
+		return f.apply(this, arguments);
+	};
+};
+var log = [];
+work = makeLogging(work, log);
+work(1); // 1, добавлено в log
+work(5); // 5, добавлено в log
+for (var i = 0; i < log.length; i++) {
+  console.log( 'Лог:' + log[i] ); // "Лог:1", затем "Лог:5"
+};
+
+
+// Логирующий декоратор (много аргументов)
+/*Создайте декоратор makeLogging(func, log), для функции func возвращающий обёртку, 
+которая при каждом вызове добавляет её аргументы в массив log.
+Условие аналогично задаче Логирующий декоратор (1 аргумент),
+но допускается func с любым набором аргументов.*/
+function work(a, b) {
+  console.log( a + b ); // work - произвольная функция
+};
+function makeLogging(f, log) {
+	return function() {
+		var arr = [];
+		for (var i = 0; i < arguments.length; i++) {
+			arr.push(arguments[i]);
+		};
+		log.push(arr.join(','));
+		return f.apply(this, arguments);
+	};
+};
+var log = [];
+work = makeLogging(work, log);
+work(1, 2); // 3
+work(4, 5); // 9
+for (var i = 0; i < log.length; i++) {
+  console.log( 'Лог:' + log[i] ); // "Лог:1,2", "Лог:4,5"
+};
+
+
+//Кеширующий декоратор
+/*Создайте декоратор makeCaching(f), который берет функцию f и возвращает обертку, которая кеширует её результаты.
+В этой задаче функция f имеет только один аргумент, и он является числом.
+* При первом вызове обертки с определенным аргументом – она вызывает f и запоминает значение.
+* При втором и последующих вызовах с тем же аргументом возвращается запомненное значение.*/
+function f(x) {
+  return Math.random()*x;
+}
+function makeCaching(f) {
+  var cache = {};
+  return function(x) {
+    if (!(x in cache)) {
+      cache[x] = f.call(this, x);
+    }
+    return cache[x];
+  };
+}
+f = makeCaching(f);
+var a, b;
+a = f(1);
+b = f(1);
+console.log( a == b ); // true (значение закешировано)
+b = f(2);
+console.log( a == b ); // false, другой аргумент => другое значение

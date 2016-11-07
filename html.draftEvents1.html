@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>test</title>
+	<link rel="stylesheet" href="draftEventsStyles.css">
+</head>
+<body>
+	<input type="button" id="hider" value="Нажмите, чтобы спрятать текст" />
+	<div id="text">Текст</div>
+	<form class="buttons">
+		<input type="button" id="hiddenButton" value="Push me to hide">
+	</form>
+	<div id="menuHiddenList" class="menu">
+		<span class="title">To-do list (push me to open):</span>
+		<ul id="hiddenList">
+			<li>read the article;</li>
+			<li>note the conclusion items;</li>
+			<li>solve the tasks.</li>
+		</ul>
+	</div>
+	<div id="messageBlock">
+		<div class="message">
+			<span>Some information - blosk#1</span>
+			<input type="button" class="messageHide" value="[x]">
+		</div>
+		<div class="message">
+			<span>Some information - blosk#2</span>
+			<input type="button" class="messageHide" value="[x]">
+		</div>
+		<div class="message">
+			<span>Some information - blosk#3</span>
+			<input type="button" class="messageHide" value="[x]">
+		</div>
+		<div class="message">
+			<span>Some information - blosk#4</span>
+			<input type="button" class="messageHide" value="[x]">
+		</div>
+	</div>
+	<div id="listAnimals">
+		<ul>
+			<li>Wild Animals
+				<ul>
+					<li>Tigers</li>
+					<li>Wolves</li>
+					<li>Foxes</li>
+					<li>Bears</li>
+					<li>Elks</li>
+				</ul>
+			</li>
+			<li>Other Animals
+				<ul>
+					<li>Pets
+						<ul>
+							<li>Cats</li>
+							<li>Dogs</li>
+						</ul>
+					</li>
+					<li>Farm Animals
+						<ul>
+							<li>Rabbits</li>
+							<li>Cows</li>
+							<li>Pigs</li>
+							<li>Horses</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<table id="sortable">
+		<caption>Click the column name to sort it</caption>
+		<thead>
+			<tr>
+				<th scope="col">Age</th>
+				<th scope="col">Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>28</td>
+				<td>Maryna</td>
+			</tr>
+			<tr>
+				<td>18</td>
+				<td>Kate</td>
+			</tr>
+			<tr>
+				<td>22</td>
+				<td>Vova</td>
+			</tr>
+			<tr>
+				<td>30</td>
+				<td>Leonid</td>
+			</tr>
+			<tr>
+				<td>5</td>
+				<td>Maks</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="buttonsNotices">
+		<p>Press the button to see the attribute content:</p>
+		<form>
+			<button data-tooltip="Yellow and orange trees around, sometimes rain">Autumn</button>
+  			<button data-tooltip="Snow and frost<br>Christmas & New Year's Holidays">Winter</button>
+  		</form>
+	</div>
+	<div>
+		<ul class="smiles">
+			<li><img src="https://js.cx/carousel/1.png"></li> 
+			<li><img src="https://js.cx/carousel/2.png"></li> 
+			<li><img src="https://js.cx/carousel/3.png"></li> 
+			<li><img src="https://js.cx/carousel/4.png"></li> 
+			<li><img src="https://js.cx/carousel/5.png"></li> 
+			<li><img src="https://js.cx/carousel/6.png"></li> 
+			<li><img src="https://js.cx/carousel/7.png"></li> 
+			<li><img src="https://js.cx/carousel/8.png"></li> 
+			<li><img src="https://js.cx/carousel/9.png"></li> 
+			<li><img src="https://js.cx/carousel/10.png"></li>
+			<input type="button" id="toRight" value="&#8658;">
+			<input type="button" id="toLeft" value="&#8656;">
+		</ul>
+	</div>
+	<script type="text/javascript">
+		hider.addEventListener('click', hideText);
+		function hideText() {
+			text.setAttribute('hidden', 'true');
+		};
+		hiddenButton.addEventListener('click', hideButton);
+		function hideButton() {
+			this.style.display = 'none';
+			// hiddenButton.setAttribute('hidden', 'true');
+		};
+		hiddenList.addEventListener('onfocus', changeShape);
+		function changeShape() {
+
+		};
+		menuHiddenList.addEventListener('click', showList);
+		function showList() {
+			menuHiddenList.removeAttribute('class');
+			menuHiddenList.setAttribute('class', 'menu-open');
+		};
+	// click the button on the message to hide it:
+		messageBlock.onclick = function(event) {
+			var target = event.target;
+			if (!target.closest('input')) return;
+			while (target != this) {
+				if (target.className == 'message') {
+					hideMessage(target);
+					return;
+				};
+				target = target.parentNode;
+			};
+		};
+		function hideMessage(target) {
+			target.setAttribute('hidden', 'true');
+		};
+
+		toRight.addEventListener('click', moveToRight);
+		toLeft.addEventListener('click', moveToLeft);
+		function moveToRight() {
+			var parent = document.querySelectorAll('ul[class="smiles"]');
+			var liList = parent[0].querySelectorAll('li');		// all 'li'=img
+			var movingImg = parent[0].removeChild(liList[0]);
+			parent[0].insertBefore(movingImg, toRight);
+		};
+		function moveToLeft() {
+			var parent = document.querySelectorAll('ul[class="smiles"]');
+			var liList = parent[0].querySelectorAll('li');		// all 'li'=img
+			var movingImg = parent[0].removeChild(liList[liList.length - 1]);
+			parent[0].insertBefore(movingImg, parent[0].firstChild);
+		};
+	// for tree-list:
+		var arrLi = listAnimals.querySelectorAll('li');
+		for (var i = 0; i < arrLi.length; i++) {
+			var li = arrLi[i];
+			var span = document.createElement('span');
+			li.insertBefore(span, li.firstChild);
+			span.appendChild(span.nextSibling);
+		};
+		listAnimals.addEventListener('mouseover', doBold);
+		function doBold(event) {
+			var target = event.target;
+			if (!target.closest('span')) return;
+			target.style.fontWeight = 'bold';
+			target.style.cursor = 'pointer';
+			for (var i = 0; i < target.children.length; i++) {
+				target.children[i].style.fontWeight = 'normal';
+			};
+		};
+		listAnimals.addEventListener('mouseout', doNotBold);
+		function doNotBold(event) {
+			var target = event.target;
+			if (!target.closest('span')) return;
+			target.style.fontWeight = '';
+			target.style.cursor = '';
+		};
+		listAnimals.addEventListener('click', hideShowChildren);
+		function hideShowChildren(event) {
+			var target = event.target;
+			if (target.tagName == 'SPAN' && target.nextElementSibling !== null) {
+				if (!target.nextElementSibling.hasAttribute('hidden')) {
+					target.nextElementSibling.setAttribute('hidden', 'true');
+				} else {
+					target.nextElementSibling.removeAttribute('hidden');
+				};
+			};
+		};
+	// sort the table by age or name
+		// compare function to sort numbers in an arrow:
+		function compareAge(elementA, elementB) {
+			return elementA.age - elementB.age;
+		};
+		function compareName(elementA, elementB) {
+			return elementA.name > elementB.name ? 1 : -1;
+		};
+		// set attributes for th:
+		sortable.querySelectorAll('th')[0].setAttribute('data-sort', 'age');
+		sortable.querySelectorAll('th')[1].setAttribute('data-sort', 'name');
+		// oncick:
+		sortable.onclick = function(event) {
+			var target = event.target;
+			if (target.tagName != 'TH') return;
+		// create an array with objects inside from the table data:
+			var arr = [];
+			for (var i = 0; i < sortable.children[2].children.length; i++) {
+				var objRow = {};
+				objRow.age = sortable.children[2].children[i].children[0].innerText;
+				objRow.name = sortable.children[2].children[i].children[1].innerText;
+				objRow.content = sortable.children[2].children[i].cloneNode(true);
+				arr.push(objRow);
+			};
+		//sort an array:
+			var data = target.getAttribute('data-sort');
+			if (data == 'age') {
+				arr.sort(compareAge);
+			} else if (data = 'name') {
+				arr.sort(compareName);
+			} else {
+				console.log('Please, check the attribute data of each table th');
+			};
+		// change tbody for new sortable one:
+			var fragment = document.createDocumentFragment();
+			var tbody = sortable.children[2];
+			var tbodySort = tbody.cloneNode(false);
+			for (var z = 0; z < sortable.children[2].children.length; z++) {
+				tbodySort.appendChild(arr[z].content);
+			};
+			fragment.appendChild(tbodySort);
+			sortable.removeChild(sortable.children[2]);
+			sortable.appendChild(fragment);
+		};
+	// notices ob buttons with attribute content:
+		document.mouseover = function(event) {
+			var target = event.target;
+			if (!target.getAttribute('data-tooltip')) return;
+			console.log(target);
+			var notice = document.createElement('div');
+			notice.setAttribute('class', 'noticeButton');
+			notice.setAttribute('position', 'absolute');
+			notice.innerHTML =  target.getAttribute('data-tooltip');
+			buttonsNotices.querySelector('form').appendChild(notice);
+		};
+	</script>
+</body>
+</html>

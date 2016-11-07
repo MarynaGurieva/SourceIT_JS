@@ -62,6 +62,45 @@
 			console.log("from the bottom field side: " +  ballStyles.bottom);
 		};
 	</script>
+	<script type="text/javascript">
+		field.addEventListener('click', moveBall);
+		function moveBall(event) {
+			event = event || window.event;
+		// get ball sizes:
+			var ballHeight = ball.offsetHeight;
+			var ballWidth = ball.offsetWidth;
+		// get internal field sides coordinates. The ball is always stayed inside them.
+			var fTop = field.getBoundingClientRect().top + field.clientTop;
+			var fBottom = fTop + field.clientHeight;
+			var fLeft = field.getBoundingClientRect().left + field.clientLeft;
+			var fRignt = fLeft + field.clientWidth;
+			console.log("fTop:" + fTop + "; fBottom:" +fBottom + "; fLeft:" + fLeft + "; fRignt" + fRignt);
+		// get mouse click coordinates:
+			var coordX = event.clientX;
+			var coordY = event.clientY;
+			console.log('coordY:' + coordY + '; coordX:' + coordX);
+		// set coordinates for ball to move:
+			var newY, newX 
+			if (coordY < fTop + ballHeight / 2) {
+				newY = 0;
+			} else if (coordY > fBottom - ballHeight / 2) {
+				newY = fBottom - ballHeight - fTop;
+			} else {
+				newY = coordY - ballHeight / 2 - fTop;
+			};
+			if (coordX < fLeft + ballWidth / 2) {
+				newX = 0; 
+			} else if (coordX > fRignt - ballWidth / 2) {
+				newX = fRignt - ballWidth - fLeft;
+			} else {
+				newX = coordX - ballWidth / 2 - fLeft;
+			};
+			console.log("newY:" + newY + "; newX:" + newX);
+		// move the ball to the new coordinates:
+			ball.style.top = newY + 'px';
+			ball.style.left = newX + 'px';
+		};
+	</script>
 	<section id="bodyEl">
 		<div id="elem">
 			<h1>The 12 principles that drive the Agile Manifesto</h1>
